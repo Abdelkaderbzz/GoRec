@@ -168,9 +168,32 @@ export const en = {
     email: 'Email',
     password: 'Password',
     signInSuccess: 'Welcome back!',
-    signUpSuccess: 'Account created! You can now sign in.',
+    signUpSuccess: 'Account created! Please check your email to confirm.',
     signOut: 'Sign Out',
     loginRequired: 'Please sign in to upload recordings',
+    continueWithGoogle: 'Continue with Google',
+    orContinueWith: 'or continue with email',
+    verifying: 'Verifying your account...',
+    confirmSuccess: 'Email confirmed successfully!',
+    confirmError: 'Failed to confirm email. Please try again.',
+    redirecting: 'Redirecting...',
+  },
+
+  // Profile
+  profile: {
+    title: 'Profile',
+    editProfile: 'Edit Profile',
+    editDescription: 'Update your profile information',
+    displayName: 'Display Name',
+    displayNamePlaceholder: 'Enter your name',
+    noName: 'No name set',
+    verified: 'Verified',
+    memberSince: 'Member since',
+    emailProvider: 'Email',
+    emailCannotChange: 'Email cannot be changed',
+    saveChanges: 'Save Changes',
+    updateSuccess: 'Profile updated successfully!',
+    signOutSuccess: 'You have been signed out.',
   },
 
   // Common

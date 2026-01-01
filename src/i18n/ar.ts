@@ -168,9 +168,32 @@ export const ar: Translations = {
     email: 'البريد الإلكتروني',
     password: 'كلمة المرور',
     signInSuccess: 'مرحباً بعودتك!',
-    signUpSuccess: 'تم إنشاء الحساب! يمكنك الآن تسجيل الدخول.',
+    signUpSuccess: 'تم إنشاء الحساب! يرجى التحقق من بريدك الإلكتروني للتأكيد.',
     signOut: 'تسجيل الخروج',
     loginRequired: 'يرجى تسجيل الدخول لرفع التسجيلات',
+    continueWithGoogle: 'المتابعة مع Google',
+    orContinueWith: 'أو المتابعة بالبريد الإلكتروني',
+    verifying: 'جارٍ التحقق من حسابك...',
+    confirmSuccess: 'تم تأكيد البريد الإلكتروني بنجاح!',
+    confirmError: 'فشل تأكيد البريد الإلكتروني. يرجى المحاولة مرة أخرى.',
+    redirecting: 'جارٍ إعادة التوجيه...',
+  },
+
+  // الملف الشخصي
+  profile: {
+    title: 'الملف الشخصي',
+    editProfile: 'تعديل الملف الشخصي',
+    editDescription: 'تحديث معلومات ملفك الشخصي',
+    displayName: 'الاسم المعروض',
+    displayNamePlaceholder: 'أدخل اسمك',
+    noName: 'لم يتم تحديد اسم',
+    verified: 'موثّق',
+    memberSince: 'عضو منذ',
+    emailProvider: 'بريد إلكتروني',
+    emailCannotChange: 'لا يمكن تغيير البريد الإلكتروني',
+    saveChanges: 'حفظ التغييرات',
+    updateSuccess: 'تم تحديث الملف الشخصي بنجاح!',
+    signOutSuccess: 'تم تسجيل خروجك.',
   },
 
   // عام
