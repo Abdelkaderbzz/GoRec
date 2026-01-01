@@ -14,6 +14,7 @@ interface UseMediaRecorderReturn {
   stopRecording: () => void;
   pauseRecording: () => void;
   resumeRecording: () => void;
+  resetRecording: () => void;
   recordedBlob: Blob | null;
   mediaRecorder: MediaRecorder | null;
 }
@@ -95,12 +96,25 @@ export function useMediaRecorder(options: UseMediaRecorderOptions = {}): UseMedi
     }
   }, [updateState]);
 
+  const resetRecording = useCallback(() => {
+    // Stop any active recording
+    if (mediaRecorderRef.current && mediaRecorderRef.current.state !== "inactive") {
+      mediaRecorderRef.current.stop();
+    }
+    // Clear all state
+    mediaRecorderRef.current = null;
+    chunksRef.current = [];
+    setRecordedBlob(null);
+    updateState("idle");
+  }, [updateState]);
+
   return {
     state,
     startRecording,
     stopRecording,
     pauseRecording,
     resumeRecording,
+    resetRecording,
     recordedBlob,
     mediaRecorder: mediaRecorderRef.current,
   };

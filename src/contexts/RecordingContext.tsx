@@ -62,6 +62,7 @@ export function RecordingProvider({ children }: { children: ReactNode }) {
     stopRecording: stopMediaRecorder,
     pauseRecording: pauseMediaRecorder,
     resumeRecording: resumeMediaRecorder,
+    resetRecording: resetMediaRecorder,
     recordedBlob,
   } = useMediaRecorder({
     onError: (error) => {
@@ -211,10 +212,19 @@ export function RecordingProvider({ children }: { children: ReactNode }) {
   }, [recordedBlob, toast, t]);
 
   const resetRecording = useCallback(() => {
+    // Reset media recorder state and blob
+    resetMediaRecorder();
+    // Reset timer
     resetTimer();
+    // Stop any active captures
     stopCapture();
     disableWebcam();
-  }, [resetTimer, stopCapture, disableWebcam]);
+    // Cleanup combined stream
+    if (combinedStreamRef.current) {
+      combinedStreamRef.current.getTracks().forEach((track) => track.stop());
+      combinedStreamRef.current = null;
+    }
+  }, [resetMediaRecorder, resetTimer, stopCapture, disableWebcam]);
 
   const value: RecordingContextType = {
     recordingState,
