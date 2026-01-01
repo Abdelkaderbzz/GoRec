@@ -1,25 +1,38 @@
-import React, { createContext, useContext, useCallback, useRef, ReactNode } from "react";
-import { useMediaRecorder, type RecordingState } from "@/hooks/useMediaRecorder";
-import { useScreenCapture } from "@/hooks/useScreenCapture";
-import { useAudioDevices } from "@/hooks/useAudioDevices";
-import { useWebcam, type WebcamPosition, type WebcamSize } from "@/hooks/useWebcam";
-import { useTimer } from "@/hooks/useTimer";
-import { useToast } from "@/hooks/use-toast";
-import { useI18n } from "@/i18n";
+import React, {
+  createContext,
+  useContext,
+  useCallback,
+  useRef,
+  ReactNode,
+} from 'react';
+import {
+  useMediaRecorder,
+  type RecordingState,
+} from '@/hooks/useMediaRecorder';
+import { useScreenCapture } from '@/hooks/useScreenCapture';
+import { useAudioDevices } from '@/hooks/useAudioDevices';
+import {
+  useWebcam,
+  type WebcamPosition,
+  type WebcamSize,
+} from '@/hooks/useWebcam';
+import { useTimer } from '@/hooks/useTimer';
+import { useToast } from '@/hooks/use-toast';
+import { useI18n } from '@/i18n';
 
 interface RecordingContextType {
   // Recording state
   recordingState: RecordingState;
   recordedBlob: Blob | null;
-  
+
   // Timer
   formattedTime: string;
   seconds: number;
-  
+
   // Screen capture
   screenStream: MediaStream | null;
   isScreenCapturing: boolean;
-  
+
   // Audio
   audioDevices: { deviceId: string; label: string }[];
   selectedAudioDevice: string | null;
@@ -28,7 +41,7 @@ interface RecordingContextType {
   isSystemAudioEnabled: boolean;
   toggleMic: () => Promise<void>;
   toggleSystemAudio: () => void;
-  
+
   // Webcam
   webcamStream: MediaStream | null;
   isWebcamEnabled: boolean;
@@ -37,7 +50,7 @@ interface RecordingContextType {
   toggleWebcam: () => Promise<void>;
   setWebcamPosition: (position: WebcamPosition) => void;
   setWebcamSize: (size: WebcamSize) => void;
-  
+
   // Controls
   startRecording: () => Promise<void>;
   stopRecording: () => void;
@@ -47,14 +60,16 @@ interface RecordingContextType {
   resetRecording: () => void;
 }
 
-const RecordingContext = createContext<RecordingContextType | undefined>(undefined);
+const RecordingContext = createContext<RecordingContextType | undefined>(
+  undefined
+);
 
 export function RecordingProvider({ children }: { children: ReactNode }) {
   const { t } = useI18n();
   const { toast } = useToast();
-  
+
   const combinedStreamRef = useRef<MediaStream | null>(null);
-  
+
   // Hooks
   const {
     state: recordingState,
@@ -69,7 +84,7 @@ export function RecordingProvider({ children }: { children: ReactNode }) {
       toast({
         title: t.common.error,
         description: t.recorder.errors.generic,
-        variant: "destructive",
+        variant: 'destructive',
       });
     },
   });
@@ -141,7 +156,7 @@ export function RecordingProvider({ children }: { children: ReactNode }) {
       // Request screen capture with system audio option
       const screen = await startCapture({
         video: {
-          displaySurface: "monitor",
+          displaySurface: 'monitor',
           frameRate: { ideal: 30 },
         },
         audio: isSystemAudioEnabled,
@@ -151,7 +166,7 @@ export function RecordingProvider({ children }: { children: ReactNode }) {
         toast({
           title: t.common.error,
           description: t.recorder.errors.screenDenied,
-          variant: "destructive",
+          variant: 'destructive',
         });
         return;
       }
@@ -165,10 +180,18 @@ export function RecordingProvider({ children }: { children: ReactNode }) {
       toast({
         title: t.common.error,
         description: t.recorder.errors.generic,
-        variant: "destructive",
+        variant: 'destructive',
       });
     }
-  }, [startCapture, combineStreams, startMediaRecorder, startTimer, isSystemAudioEnabled, t, toast]);
+  }, [
+    startCapture,
+    combineStreams,
+    startMediaRecorder,
+    startTimer,
+    isSystemAudioEnabled,
+    t,
+    toast,
+  ]);
 
   const stopRecording = useCallback(() => {
     stopMediaRecorder();
@@ -197,9 +220,12 @@ export function RecordingProvider({ children }: { children: ReactNode }) {
     if (!recordedBlob) return;
 
     const url = URL.createObjectURL(recordedBlob);
-    const a = document.createElement("a");
+    const a = document.createElement('a');
     a.href = url;
-    a.download = `recording-${new Date().toISOString().slice(0, 19).replace(/:/g, "-")}.webm`;
+    a.download = `recording-${new Date()
+      .toISOString()
+      .slice(0, 19)
+      .replace(/:/g, '-')}.webm`;
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
@@ -207,7 +233,7 @@ export function RecordingProvider({ children }: { children: ReactNode }) {
 
     toast({
       title: t.common.success,
-      description: "Recording downloaded successfully!",
+      description: 'Recording downloaded successfully!',
     });
   }, [recordedBlob, toast, t]);
 
@@ -256,14 +282,16 @@ export function RecordingProvider({ children }: { children: ReactNode }) {
   };
 
   return (
-    <RecordingContext.Provider value={value}>{children}</RecordingContext.Provider>
+    <RecordingContext.Provider value={value}>
+      {children}
+    </RecordingContext.Provider>
   );
 }
 
 export function useRecording() {
   const context = useContext(RecordingContext);
   if (!context) {
-    throw new Error("useRecording must be used within a RecordingProvider");
+    throw new Error('useRecording must be used within a RecordingProvider');
   }
   return context;
 }
