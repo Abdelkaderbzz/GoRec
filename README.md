@@ -1,4 +1,4 @@
-# 🎬 ScreenRec - Browser-Based Screen Recorder
+# 🎬 GoRec - Browser-Based Screen Recorder
 
 A powerful, modern screen recording application built with React and TypeScript. Record your screen, webcam, and audio directly from your browser with seamless cloud storage integration.
 

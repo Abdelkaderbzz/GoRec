@@ -1,18 +1,25 @@
 /**
  * Authentication Context
- * 
+ *
  * Provides authentication state and methods throughout the app.
- * Uses Supabase Auth with email/password authentication.
- * 
+ * Uses Supabase Auth with email/password and Google OAuth authentication.
+ *
  * @example
  * ```tsx
- * const { user, isLoading, signIn, signUp, signOut } = useAuth();
+ * const { user, isLoading, signIn, signUp, signInWithGoogle, signOut } = useAuth();
  * ```
  */
 
-import React, { createContext, useContext, useEffect, useState, useCallback, ReactNode } from "react";
-import { User, Session } from "@supabase/supabase-js";
-import { supabase } from "@/integrations/supabase/client";
+import React, {
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+  useCallback,
+  ReactNode,
+} from 'react';
+import { User, Session } from '@supabase/supabase-js';
+import { supabase } from '@/integrations/supabase/client';
 
 interface AuthContextType {
   /** Current authenticated user, null if not logged in */
@@ -25,8 +32,17 @@ interface AuthContextType {
   signIn: (email: string, password: string) => Promise<{ error: Error | null }>;
   /** Sign up with email and password */
   signUp: (email: string, password: string) => Promise<{ error: Error | null }>;
+  /** Sign in with Google OAuth */
+  signInWithGoogle: () => Promise<{ error: Error | null }>;
   /** Sign out the current user */
   signOut: () => Promise<void>;
+  /** Resend confirmation email */
+  resendConfirmationEmail: (email: string) => Promise<{ error: Error | null }>;
+  /** Update user profile */
+  updateProfile: (data: {
+    displayName?: string;
+    avatarUrl?: string;
+  }) => Promise<{ error: Error | null }>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -41,13 +57,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     // Set up auth state listener FIRST
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      (event, session) => {
-        setSession(session);
-        setUser(session?.user ?? null);
-        setIsLoading(false);
-      }
-    );
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((event, session) => {
+      setSession(session);
+      setUser(session?.user ?? null);
+      setIsLoading(false);
+    });
 
     // THEN check for existing session
     supabase.auth.getSession().then(({ data: { session } }) => {
@@ -68,8 +84,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const signUp = useCallback(async (email: string, password: string) => {
-    const redirectUrl = `${window.location.origin}/`;
-    
+    const redirectUrl = `${window.location.origin}/auth/callback`;
+
     const { error } = await supabase.auth.signUp({
       email: email.trim(),
       password,
@@ -80,9 +96,45 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     return { error: error ? new Error(error.message) : null };
   }, []);
 
+  const signInWithGoogle = useCallback(async () => {
+    const redirectUrl = `${window.location.origin}/auth/callback`;
+
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider: 'google',
+      options: {
+        redirectTo: redirectUrl,
+      },
+    });
+    return { error: error ? new Error(error.message) : null };
+  }, []);
+
   const signOut = useCallback(async () => {
     await supabase.auth.signOut();
   }, []);
+
+  const resendConfirmationEmail = useCallback(async (email: string) => {
+    const { error } = await supabase.auth.resend({
+      type: 'signup',
+      email: email.trim(),
+      options: {
+        emailRedirectTo: `${window.location.origin}/auth/callback`,
+      },
+    });
+    return { error: error ? new Error(error.message) : null };
+  }, []);
+
+  const updateProfile = useCallback(
+    async (data: { displayName?: string; avatarUrl?: string }) => {
+      const { error } = await supabase.auth.updateUser({
+        data: {
+          display_name: data.displayName,
+          avatar_url: data.avatarUrl,
+        },
+      });
+      return { error: error ? new Error(error.message) : null };
+    },
+    []
+  );
 
   const value: AuthContextType = {
     user,
@@ -90,7 +142,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     isLoading,
     signIn,
     signUp,
+    signInWithGoogle,
     signOut,
+    resendConfirmationEmail,
+    updateProfile,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
@@ -103,7 +158,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 export function useAuth() {
   const context = useContext(AuthContext);
   if (!context) {
-    throw new Error("useAuth must be used within an AuthProvider");
+    throw new Error('useAuth must be used within an AuthProvider');
   }
   return context;
 }

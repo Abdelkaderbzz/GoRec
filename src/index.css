@@ -1,8 +1,8 @@
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&family=Outfit:wght@400;500;600;700;800&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
-@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&family=Outfit:wght@400;500;600;700;800&display=swap');
 
 @layer base {
   :root {
@@ -37,13 +37,26 @@
     --radius: 0.75rem;
 
     /* Custom tokens */
-    --gradient-primary: linear-gradient(135deg, hsl(262, 83%, 58%) 0%, hsl(200, 100%, 50%) 50%, hsl(340, 82%, 60%) 100%);
-    --gradient-accent: linear-gradient(135deg, hsl(340, 82%, 60%) 0%, hsl(262, 83%, 58%) 100%);
-    --gradient-subtle: linear-gradient(180deg, hsl(240, 15%, 6%) 0%, hsl(240, 15%, 3%) 100%);
-    
+    --gradient-primary: linear-gradient(
+      135deg,
+      hsl(262, 83%, 58%) 0%,
+      hsl(200, 100%, 50%) 50%,
+      hsl(340, 82%, 60%) 100%
+    );
+    --gradient-accent: linear-gradient(
+      135deg,
+      hsl(340, 82%, 60%) 0%,
+      hsl(262, 83%, 58%) 100%
+    );
+    --gradient-subtle: linear-gradient(
+      180deg,
+      hsl(240, 15%, 6%) 0%,
+      hsl(240, 15%, 3%) 100%
+    );
+
     --glow-primary: 0 0 60px hsl(262 83% 58% / 0.4);
     --glow-accent: 0 0 40px hsl(340 82% 60% / 0.3);
-    
+
     --glass: hsl(240 12% 8% / 0.8);
     --glass-border: hsl(240 8% 25% / 0.5);
 
@@ -104,7 +117,7 @@
     font-family: 'Outfit', sans-serif;
   }
 
-  html[dir="rtl"] {
+  html[dir='rtl'] {
     font-family: 'Cairo', sans-serif;
   }
 
@@ -142,7 +155,8 @@
     padding: 1px;
     border-radius: inherit;
     background: var(--gradient-primary);
-    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask: linear-gradient(#fff 0 0) content-box,
+      linear-gradient(#fff 0 0);
     mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
     -webkit-mask-composite: xor;
     mask-composite: exclude;
@@ -162,7 +176,8 @@
   }
 
   @keyframes recording-pulse {
-    0%, 100% {
+    0%,
+    100% {
       opacity: 1;
       transform: scale(1);
     }
@@ -177,7 +192,8 @@
   }
 
   @keyframes float {
-    0%, 100% {
+    0%,
+    100% {
       transform: translateY(0);
     }
     50% {
