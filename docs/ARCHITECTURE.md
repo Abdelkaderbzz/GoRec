@@ -1,6 +1,6 @@
 # Architecture Overview
 
-This document describes the technical architecture of ScreenRec.
+This document describes the technical architecture of GoRec.
 
 ## High-Level Architecture
 

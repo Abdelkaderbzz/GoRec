@@ -1,6 +1,6 @@
 # API Reference
 
-This document describes the hooks and APIs used in ScreenRec.
+This document describes the hooks and APIs used in GoRec.
 
 ## Custom Hooks
 

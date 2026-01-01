@@ -1,5 +1,5 @@
 -- ===================================
--- SCREENREC DATABASE SETUP
+-- GOREC DATABASE SETUP
 -- Run this in Supabase SQL Editor
 -- ===================================
 

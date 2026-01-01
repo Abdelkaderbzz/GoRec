@@ -40,10 +40,10 @@ export function Header() {
         <Link to='/' className='flex items-center gap-2'>
           <img
             src='/favicon.png'
-            alt='ScreenRec'
+            alt='GoRec'
             className='w-8 h-8 rounded-lg'
           />
-          <span className='font-bold text-lg gradient-text'>ScreenRec</span>
+          <span className='font-bold text-lg gradient-text'>GoRec</span>
         </Link>
 
         <nav className='flex items-center gap-4'>
