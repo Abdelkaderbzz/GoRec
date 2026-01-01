@@ -128,7 +128,7 @@ export default function Landing() {
             <div className='text-center md:text-start'>
               <h3 className='text-xl font-bold gradient-text mb-2'>ScreenRec</h3>
               <p className='text-sm text-muted-foreground'>
-                {t.landing.footer.madeBy} Abdelkader Bouzomita
+                {t.landing.footer.madeBy} abdelkaderbz
               </p>
             </div>
             
