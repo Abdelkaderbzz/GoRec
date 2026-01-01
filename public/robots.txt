@@ -1,3 +1,6 @@
+# ScreenRec - Browser Screen Recorder
+# https://screenrec.app
+
 User-agent: Googlebot
 Allow: /
 
@@ -10,5 +13,11 @@ Allow: /
 User-agent: facebookexternalhit
 Allow: /
 
+User-agent: LinkedInBot
+Allow: /
+
 User-agent: *
 Allow: /
+
+# Sitemap
+Sitemap: https://screenrec.app/sitemap.xml
