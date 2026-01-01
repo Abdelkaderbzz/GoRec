@@ -1,5 +1,5 @@
-# ScreenRec - Browser Screen Recorder
-# https://screenrec.app
+# GoRec - Browser Screen Recorder
+# https://gorec.netlify.app
 
 User-agent: Googlebot
 Allow: /
@@ -20,4 +20,4 @@ User-agent: *
 Allow: /
 
 # Sitemap
-Sitemap: https://screenrec.app/sitemap.xml
+Sitemap: https://gorec.netlify.app/sitemap.xml

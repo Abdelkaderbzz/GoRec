@@ -63,7 +63,7 @@ export const en = {
 
   // Recorder page
   recorder: {
-    title: 'Screen Recorder',
+    title: 'GoRec',
     subtitle: 'Configure your recording settings and start capturing',
 
     // Status

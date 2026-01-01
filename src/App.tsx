@@ -1,5 +1,5 @@
 /**
- * ScreenRec - Browser-based Screen Recorder
+ * GoRec - Browser-based Screen Recorder
  *
  * Main application entry point with routing and providers.
  *

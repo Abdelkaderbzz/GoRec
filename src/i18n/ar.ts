@@ -63,7 +63,7 @@ export const ar: Translations = {
 
   // صفحة التسجيل
   recorder: {
-    title: 'مسجّل الشاشة',
+    title: 'GoRec',
     subtitle: 'اضبط إعدادات التسجيل وابدأ الالتقاط',
 
     // الحالة
