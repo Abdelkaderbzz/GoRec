@@ -133,16 +133,16 @@ export function RecordingProvider({ children }: { children: ReactNode }) {
   const animationFrameRef = useRef<number | null>(null);
   const screenVideoRef = useRef<HTMLVideoElement | null>(null);
   const webcamVideoRef = useRef<HTMLVideoElement | null>(null);
-  
+
   // Refs to track current position/size for use in animation loop
   const webcamPositionRef = useRef<WebcamPosition>(webcamPosition);
   const webcamSizeRef = useRef<WebcamSize>(webcamSize);
-  
+
   // Keep refs in sync with state
   useEffect(() => {
     webcamPositionRef.current = webcamPosition;
   }, [webcamPosition]);
-  
+
   useEffect(() => {
     webcamSizeRef.current = webcamSize;
   }, [webcamSize]);
@@ -158,23 +158,38 @@ export function RecordingProvider({ children }: { children: ReactNode }) {
   }, []);
 
   // Get webcam position coordinates
-  const getWebcamPositionCoords = useCallback((canvasWidth: number, canvasHeight: number, webcamWidth: number, webcamHeight: number) => {
-    const padding = 20;
-    const positions = {
-      'top-left': { x: padding, y: padding },
-      'top-right': { x: canvasWidth - webcamWidth - padding, y: padding },
-      'bottom-left': { x: padding, y: canvasHeight - webcamHeight - padding },
-      'bottom-right': { x: canvasWidth - webcamWidth - padding, y: canvasHeight - webcamHeight - padding },
-    };
-    return positions[webcamPositionRef.current] || positions['bottom-right'];
-  }, []);
+  const getWebcamPositionCoords = useCallback(
+    (
+      canvasWidth: number,
+      canvasHeight: number,
+      webcamWidth: number,
+      webcamHeight: number
+    ) => {
+      const padding = 20;
+      const positions = {
+        'top-left': { x: padding, y: padding },
+        'top-right': { x: canvasWidth - webcamWidth - padding, y: padding },
+        'bottom-left': { x: padding, y: canvasHeight - webcamHeight - padding },
+        'bottom-right': {
+          x: canvasWidth - webcamWidth - padding,
+          y: canvasHeight - webcamHeight - padding,
+        },
+      };
+      return positions[webcamPositionRef.current] || positions['bottom-right'];
+    },
+    []
+  );
 
   // Combine all streams into one (with webcam compositing)
   const combineStreams = useCallback(
-    async (screenStream: MediaStream, webcamStreamParam: MediaStream | null): Promise<MediaStream> => {
+    async (
+      screenStream: MediaStream,
+      webcamStreamParam: MediaStream | null
+    ): Promise<MediaStream> => {
       // Check if webcam stream is actually active
-      const hasActiveWebcam = webcamStreamParam && 
-        webcamStreamParam.getVideoTracks().length > 0 && 
+      const hasActiveWebcam =
+        webcamStreamParam &&
+        webcamStreamParam.getVideoTracks().length > 0 &&
         webcamStreamParam.getVideoTracks()[0].readyState === 'live';
 
       // If no webcam, just combine screen and audio
@@ -220,13 +235,16 @@ export function RecordingProvider({ children }: { children: ReactNode }) {
         new Promise<void>((resolve, reject) => {
           const timeout = setTimeout(() => resolve(), 3000); // Fallback timeout
           screenVideo.onloadedmetadata = () => {
-            screenVideo.play().then(() => {
-              clearTimeout(timeout);
-              resolve();
-            }).catch(() => {
-              clearTimeout(timeout);
-              resolve();
-            });
+            screenVideo
+              .play()
+              .then(() => {
+                clearTimeout(timeout);
+                resolve();
+              })
+              .catch(() => {
+                clearTimeout(timeout);
+                resolve();
+              });
           };
           screenVideo.onerror = () => {
             clearTimeout(timeout);
@@ -236,13 +254,16 @@ export function RecordingProvider({ children }: { children: ReactNode }) {
         new Promise<void>((resolve, reject) => {
           const timeout = setTimeout(() => resolve(), 3000); // Fallback timeout
           webcamVideo.onloadedmetadata = () => {
-            webcamVideo.play().then(() => {
-              clearTimeout(timeout);
-              resolve();
-            }).catch(() => {
-              clearTimeout(timeout);
-              resolve();
-            });
+            webcamVideo
+              .play()
+              .then(() => {
+                clearTimeout(timeout);
+                resolve();
+              })
+              .catch(() => {
+                clearTimeout(timeout);
+                resolve();
+              });
           };
           webcamVideo.onerror = () => {
             clearTimeout(timeout);
@@ -252,7 +273,7 @@ export function RecordingProvider({ children }: { children: ReactNode }) {
       ]);
 
       // Extra wait to ensure video frames are available
-      await new Promise(resolve => setTimeout(resolve, 100));
+      await new Promise((resolve) => setTimeout(resolve, 100));
 
       // Set canvas size to match screen
       canvas.width = screenVideo.videoWidth;
@@ -270,22 +291,45 @@ export function RecordingProvider({ children }: { children: ReactNode }) {
         // Draw webcam with rounded corners
         if (webcamVideo.readyState >= 2) {
           const webcamDims = getWebcamDimensions();
-          const webcamPos = getWebcamPositionCoords(canvas.width, canvas.height, webcamDims.width, webcamDims.height);
-          
+          const webcamPos = getWebcamPositionCoords(
+            canvas.width,
+            canvas.height,
+            webcamDims.width,
+            webcamDims.height
+          );
+
           const radius = 12;
-          
+
           ctx.save();
           ctx.beginPath();
-          ctx.roundRect(webcamPos.x, webcamPos.y, webcamDims.width, webcamDims.height, radius);
+          ctx.roundRect(
+            webcamPos.x,
+            webcamPos.y,
+            webcamDims.width,
+            webcamDims.height,
+            radius
+          );
           ctx.clip();
-          ctx.drawImage(webcamVideo, webcamPos.x, webcamPos.y, webcamDims.width, webcamDims.height);
+          ctx.drawImage(
+            webcamVideo,
+            webcamPos.x,
+            webcamPos.y,
+            webcamDims.width,
+            webcamDims.height
+          );
           ctx.restore();
 
           // Draw border
           ctx.strokeStyle = 'rgba(255, 255, 255, 0.3)';
           ctx.lineWidth = 2;
           ctx.beginPath();
-          ctx.roundRect(webcamPos.x, webcamPos.y, webcamDims.width, webcamDims.height, radius);
+          ctx.roundRect(
+            webcamPos.x,
+            webcamPos.y,
+            webcamDims.width,
+            webcamDims.height,
+            radius
+          );
           ctx.stroke();
         }
 
@@ -314,7 +358,13 @@ export function RecordingProvider({ children }: { children: ReactNode }) {
 
       return new MediaStream(tracks);
     },
-    [isSystemAudioEnabled, isMicEnabled, getMicStream, getWebcamDimensions, getWebcamPositionCoords]
+    [
+      isSystemAudioEnabled,
+      isMicEnabled,
+      getMicStream,
+      getWebcamDimensions,
+      getWebcamPositionCoords,
+    ]
   );
 
   const startRecording = useCallback(async () => {
