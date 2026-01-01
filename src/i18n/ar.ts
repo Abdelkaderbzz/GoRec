@@ -53,6 +53,12 @@ export const ar: Translations = {
     ctaSection: {
       title: 'هل أنت مستعد لبدء التسجيل؟',
     },
+
+    // التذييل
+    footer: {
+      madeBy: 'صُنع بـ ❤️ بواسطة',
+      rights: 'جميع الحقوق محفوظة.',
+    },
   },
 
   // صفحة التسجيل

@@ -53,6 +53,12 @@ export const en = {
     ctaSection: {
       title: 'Ready to Start Recording?',
     },
+
+    // Footer
+    footer: {
+      madeBy: 'Made with ❤️ by',
+      rights: 'All rights reserved.',
+    },
   },
 
   // Recorder page

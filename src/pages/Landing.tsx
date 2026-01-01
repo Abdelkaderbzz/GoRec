@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { Monitor, Mic, Camera, Settings, ArrowRight, Play } from 'lucide-react';
+import { Monitor, Mic, Camera, Settings, ArrowRight, Play, Mail, Github, Linkedin } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useI18n } from '@/i18n';
 import { Header } from '@/components/shared/Header';
@@ -120,6 +120,55 @@ export default function Landing() {
           </div>
         </div>
       </section>
+
+      {/* Footer */}
+      <footer className='py-12 px-4 border-t border-border/50'>
+        <div className='container mx-auto'>
+          <div className='flex flex-col md:flex-row items-center justify-between gap-6'>
+            <div className='text-center md:text-start'>
+              <h3 className='text-xl font-bold gradient-text mb-2'>ScreenRec</h3>
+              <p className='text-sm text-muted-foreground'>
+                {t.landing.footer.madeBy} Abdelkader Bouzomita
+              </p>
+            </div>
+            
+            <div className='flex items-center gap-4'>
+              <a 
+                href='mailto:abdelkader.bouzomita@gmail.com'
+                className='flex items-center gap-2 px-4 py-2 rounded-lg glass-card hover:bg-primary/10 transition-colors'
+                title='Email'
+              >
+                <Mail className='w-5 h-5 text-primary' />
+                <span className='text-sm hidden sm:inline'>abdelkader.bouzomita@gmail.com</span>
+              </a>
+              <a 
+                href='https://github.com/Abdelkaderbzz'
+                target='_blank'
+                rel='noopener noreferrer'
+                className='p-3 rounded-lg glass-card hover:bg-primary/10 transition-colors'
+                title='GitHub'
+              >
+                <Github className='w-5 h-5' />
+              </a>
+              <a 
+                href='https://www.linkedin.com/in/abdelkader-bouzomita/'
+                target='_blank'
+                rel='noopener noreferrer'
+                className='p-3 rounded-lg glass-card hover:bg-primary/10 transition-colors'
+                title='LinkedIn'
+              >
+                <Linkedin className='w-5 h-5' />
+              </a>
+            </div>
+          </div>
+          
+          <div className='mt-8 pt-6 border-t border-border/30 text-center'>
+            <p className='text-sm text-muted-foreground'>
+              © {new Date().getFullYear()} ScreenRec. {t.landing.footer.rights}
+            </p>
+          </div>
+        </div>
+      </footer>
     </div>
   );
 }
