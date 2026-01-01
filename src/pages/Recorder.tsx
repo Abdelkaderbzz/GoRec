@@ -110,6 +110,20 @@ export default function Recorder() {
     }
   }, [toggleWebcam, isTogglingWebcam]);
 
+  // Handle start recording with auth check
+  const handleStartRecording = useCallback(() => {
+    if (!user) {
+      toast({
+        title: t.common.error,
+        description: t.recorder.errors.guestNotAllowed,
+        variant: 'destructive',
+      });
+      navigate('/auth');
+      return;
+    }
+    startRecording();
+  }, [user, startRecording, toast, t, navigate]);
+
   useEffect(() => {
     if (webcamRef.current && webcamStream) {
       webcamRef.current.srcObject = webcamStream;
@@ -256,7 +270,7 @@ export default function Recorder() {
             <div className='flex flex-wrap justify-center gap-3 mt-6'>
               {isIdle && (
                 <Button
-                  onClick={startRecording}
+                  onClick={handleStartRecording}
                   size='lg'
                   className='bg-gradient-to-r from-primary to-accent hover:opacity-90 gap-2'
                 >

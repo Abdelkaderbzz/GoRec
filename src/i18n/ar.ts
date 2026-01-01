@@ -148,6 +148,7 @@ export const ar: Translations = {
       webcamDenied: 'تم رفض الوصول لكاميرا الويب. سيتم التسجيل بدونها.',
       notSupported: 'تسجيل الشاشة غير مدعوم في هذا المتصفح.',
       generic: 'حدث خطأ. يرجى المحاولة مرة أخرى.',
+      guestNotAllowed: 'يرجى تسجيل الدخول لبدء التسجيل.',
     },
 
     // نصائح
@@ -161,7 +162,7 @@ export const ar: Translations = {
 
   // المصادقة
   auth: {
-    welcome: 'مرحباً بك في ScreenRec',
+    welcome: 'مرحباً بك في GoRec',
     description: 'سجّل دخولك لحفظ ومشاركة تسجيلاتك',
     signIn: 'تسجيل الدخول',
     signUp: 'إنشاء حساب',

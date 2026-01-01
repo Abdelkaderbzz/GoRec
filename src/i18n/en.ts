@@ -148,6 +148,7 @@ export const en = {
       webcamDenied: 'Webcam access was denied. Recording without webcam.',
       notSupported: 'Screen recording is not supported in this browser.',
       generic: 'An error occurred. Please try again.',
+      guestNotAllowed: 'Please sign in to start recording.',
     },
 
     // Tips
@@ -161,7 +162,7 @@ export const en = {
 
   // Authentication
   auth: {
-    welcome: 'Welcome to ScreenRec',
+    welcome: 'Welcome to GoRec',
     description: 'Sign in to save and share your recordings',
     signIn: 'Sign In',
     signUp: 'Sign Up',
