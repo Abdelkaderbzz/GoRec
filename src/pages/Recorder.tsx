@@ -82,9 +82,8 @@ export default function Recorder() {
     const result = await uploadVideo(recordedBlob, seconds);
     
     if (result) {
-      // Use share token URL for better sharing
-      const shareLink = `${window.location.origin}/watch/${result.shareToken}`;
-      setShareUrl(shareLink);
+      // Use Supabase public URL for direct video access
+      setShareUrl(result.publicUrl);
       setShowShareDialog(true);
       toast({
         title: t.common.success,
