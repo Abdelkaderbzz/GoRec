@@ -44,6 +44,11 @@ export const en = {
       users: "Happy Users",
       rating: "User Rating",
     },
+
+    // CTA Section
+    ctaSection: {
+      title: "Ready to Start Recording?",
+    },
   },
 
   // Recorder page

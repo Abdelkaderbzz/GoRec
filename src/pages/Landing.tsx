@@ -83,7 +83,7 @@ export default function Landing() {
           <div className="glass-card gradient-border rounded-3xl p-12 text-center relative overflow-hidden">
             <div className="absolute inset-0 bg-gradient-to-r from-primary/10 to-accent/10" />
             <div className="relative z-10">
-              <h2 className="text-3xl md:text-4xl font-bold mb-6">Ready to Start Recording?</h2>
+              <h2 className="text-3xl md:text-4xl font-bold mb-6">{t.landing.ctaSection.title}</h2>
               <Button asChild size="lg" className="bg-gradient-to-r from-primary to-accent hover:opacity-90 text-lg px-8">
                 <Link to="/recorder" className="gap-2">
                   {t.landing.cta}
