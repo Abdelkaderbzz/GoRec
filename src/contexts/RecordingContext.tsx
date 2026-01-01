@@ -4,6 +4,7 @@ import React, {
   useCallback,
   useRef,
   ReactNode,
+  useEffect,
 } from 'react';
 import {
   useMediaRecorder,
@@ -127,12 +128,134 @@ export function RecordingProvider({ children }: { children: ReactNode }) {
     reset: resetTimer,
   } = useTimer();
 
-  // Combine all streams into one
-  const combineStreams = useCallback(
-    async (screenStream: MediaStream): Promise<MediaStream> => {
-      const tracks: MediaStreamTrack[] = [...screenStream.getVideoTracks()];
+  // Refs for canvas compositing
+  const canvasRef = useRef<HTMLCanvasElement | null>(null);
+  const animationFrameRef = useRef<number | null>(null);
+  const screenVideoRef = useRef<HTMLVideoElement | null>(null);
+  const webcamVideoRef = useRef<HTMLVideoElement | null>(null);
 
-      // Add system audio if enabled (from screen capture)
+  // Get webcam size in pixels based on size setting
+  const getWebcamDimensions = useCallback((canvasWidth: number) => {
+    const sizes = {
+      small: { width: 160, height: 120 },
+      medium: { width: 240, height: 180 },
+      large: { width: 320, height: 240 },
+    };
+    return sizes[webcamSize] || sizes.medium;
+  }, [webcamSize]);
+
+  // Get webcam position coordinates
+  const getWebcamPosition = useCallback((canvasWidth: number, canvasHeight: number, webcamWidth: number, webcamHeight: number) => {
+    const padding = 20;
+    const positions = {
+      'top-left': { x: padding, y: padding },
+      'top-right': { x: canvasWidth - webcamWidth - padding, y: padding },
+      'bottom-left': { x: padding, y: canvasHeight - webcamHeight - padding },
+      'bottom-right': { x: canvasWidth - webcamWidth - padding, y: canvasHeight - webcamHeight - padding },
+    };
+    return positions[webcamPosition] || positions['bottom-right'];
+  }, [webcamPosition]);
+
+  // Combine all streams into one (with webcam compositing)
+  const combineStreams = useCallback(
+    async (screenStream: MediaStream, webcamStreamParam: MediaStream | null): Promise<MediaStream> => {
+      // If no webcam, just combine screen and audio
+      if (!webcamStreamParam || !isWebcamEnabled) {
+        const tracks: MediaStreamTrack[] = [...screenStream.getVideoTracks()];
+
+        if (isSystemAudioEnabled) {
+          const audioTracks = screenStream.getAudioTracks();
+          tracks.push(...audioTracks);
+        }
+
+        if (isMicEnabled) {
+          const micStream = await getMicStream();
+          if (micStream) {
+            tracks.push(...micStream.getAudioTracks());
+          }
+        }
+
+        return new MediaStream(tracks);
+      }
+
+      // Create canvas for compositing
+      const canvas = document.createElement('canvas');
+      canvasRef.current = canvas;
+
+      // Create video elements for streams
+      const screenVideo = document.createElement('video');
+      screenVideo.srcObject = screenStream;
+      screenVideo.muted = true;
+      screenVideo.playsInline = true;
+      screenVideoRef.current = screenVideo;
+
+      const webcamVideo = document.createElement('video');
+      webcamVideo.srcObject = webcamStreamParam;
+      webcamVideo.muted = true;
+      webcamVideo.playsInline = true;
+      webcamVideoRef.current = webcamVideo;
+
+      // Wait for videos to be ready
+      await Promise.all([
+        new Promise<void>((resolve) => {
+          screenVideo.onloadedmetadata = () => {
+            screenVideo.play();
+            resolve();
+          };
+        }),
+        new Promise<void>((resolve) => {
+          webcamVideo.onloadedmetadata = () => {
+            webcamVideo.play();
+            resolve();
+          };
+        }),
+      ]);
+
+      // Set canvas size to match screen
+      canvas.width = screenVideo.videoWidth;
+      canvas.height = screenVideo.videoHeight;
+
+      const ctx = canvas.getContext('2d')!;
+
+      // Animation loop to draw both videos
+      const drawFrame = () => {
+        if (!canvasRef.current) return;
+
+        // Draw screen
+        ctx.drawImage(screenVideo, 0, 0, canvas.width, canvas.height);
+
+        // Draw webcam with rounded corners
+        if (webcamVideo.readyState >= 2) {
+          const webcamDims = getWebcamDimensions(canvas.width);
+          const webcamPos = getWebcamPosition(canvas.width, canvas.height, webcamDims.width, webcamDims.height);
+          
+          const radius = 12;
+          
+          ctx.save();
+          ctx.beginPath();
+          ctx.roundRect(webcamPos.x, webcamPos.y, webcamDims.width, webcamDims.height, radius);
+          ctx.clip();
+          ctx.drawImage(webcamVideo, webcamPos.x, webcamPos.y, webcamDims.width, webcamDims.height);
+          ctx.restore();
+
+          // Draw border
+          ctx.strokeStyle = 'rgba(255, 255, 255, 0.3)';
+          ctx.lineWidth = 2;
+          ctx.beginPath();
+          ctx.roundRect(webcamPos.x, webcamPos.y, webcamDims.width, webcamDims.height, radius);
+          ctx.stroke();
+        }
+
+        animationFrameRef.current = requestAnimationFrame(drawFrame);
+      };
+
+      drawFrame();
+
+      // Capture canvas stream
+      const canvasStream = canvas.captureStream(30);
+      const tracks: MediaStreamTrack[] = [...canvasStream.getVideoTracks()];
+
+      // Add system audio if enabled
       if (isSystemAudioEnabled) {
         const audioTracks = screenStream.getAudioTracks();
         tracks.push(...audioTracks);
@@ -148,7 +271,7 @@ export function RecordingProvider({ children }: { children: ReactNode }) {
 
       return new MediaStream(tracks);
     },
-    [isSystemAudioEnabled, isMicEnabled, getMicStream]
+    [isSystemAudioEnabled, isMicEnabled, isWebcamEnabled, getMicStream, getWebcamDimensions, getWebcamPosition]
   );
 
   const startRecording = useCallback(async () => {
@@ -171,7 +294,7 @@ export function RecordingProvider({ children }: { children: ReactNode }) {
         return;
       }
 
-      const combinedStream = await combineStreams(screen);
+      const combinedStream = await combineStreams(screen, webcamStream);
       combinedStreamRef.current = combinedStream;
 
       startMediaRecorder(combinedStream);
@@ -189,6 +312,7 @@ export function RecordingProvider({ children }: { children: ReactNode }) {
     startMediaRecorder,
     startTimer,
     isSystemAudioEnabled,
+    webcamStream,
     t,
     toast,
   ]);
@@ -198,6 +322,25 @@ export function RecordingProvider({ children }: { children: ReactNode }) {
     stopCapture();
     disableWebcam();
     pauseTimer();
+
+    // Stop canvas animation
+    if (animationFrameRef.current) {
+      cancelAnimationFrame(animationFrameRef.current);
+      animationFrameRef.current = null;
+    }
+
+    // Cleanup video elements
+    if (screenVideoRef.current) {
+      screenVideoRef.current.srcObject = null;
+      screenVideoRef.current = null;
+    }
+    if (webcamVideoRef.current) {
+      webcamVideoRef.current.srcObject = null;
+      webcamVideoRef.current = null;
+    }
+
+    // Cleanup canvas
+    canvasRef.current = null;
 
     // Cleanup combined stream
     if (combinedStreamRef.current) {
