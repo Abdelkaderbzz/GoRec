@@ -159,8 +159,13 @@ export function RecordingProvider({ children }: { children: ReactNode }) {
   // Combine all streams into one (with webcam compositing)
   const combineStreams = useCallback(
     async (screenStream: MediaStream, webcamStreamParam: MediaStream | null): Promise<MediaStream> => {
+      // Check if webcam stream is actually active
+      const hasActiveWebcam = webcamStreamParam && 
+        webcamStreamParam.getVideoTracks().length > 0 && 
+        webcamStreamParam.getVideoTracks()[0].readyState === 'live';
+
       // If no webcam, just combine screen and audio
-      if (!webcamStreamParam || !isWebcamEnabled) {
+      if (!hasActiveWebcam) {
         const tracks: MediaStreamTrack[] = [...screenStream.getVideoTracks()];
 
         if (isSystemAudioEnabled) {
@@ -187,29 +192,54 @@ export function RecordingProvider({ children }: { children: ReactNode }) {
       screenVideo.srcObject = screenStream;
       screenVideo.muted = true;
       screenVideo.playsInline = true;
+      screenVideo.autoplay = true;
       screenVideoRef.current = screenVideo;
 
       const webcamVideo = document.createElement('video');
       webcamVideo.srcObject = webcamStreamParam;
       webcamVideo.muted = true;
       webcamVideo.playsInline = true;
+      webcamVideo.autoplay = true;
       webcamVideoRef.current = webcamVideo;
 
-      // Wait for videos to be ready
+      // Wait for videos to be ready and playing
       await Promise.all([
-        new Promise<void>((resolve) => {
+        new Promise<void>((resolve, reject) => {
+          const timeout = setTimeout(() => resolve(), 3000); // Fallback timeout
           screenVideo.onloadedmetadata = () => {
-            screenVideo.play();
+            screenVideo.play().then(() => {
+              clearTimeout(timeout);
+              resolve();
+            }).catch(() => {
+              clearTimeout(timeout);
+              resolve();
+            });
+          };
+          screenVideo.onerror = () => {
+            clearTimeout(timeout);
             resolve();
           };
         }),
-        new Promise<void>((resolve) => {
+        new Promise<void>((resolve, reject) => {
+          const timeout = setTimeout(() => resolve(), 3000); // Fallback timeout
           webcamVideo.onloadedmetadata = () => {
-            webcamVideo.play();
+            webcamVideo.play().then(() => {
+              clearTimeout(timeout);
+              resolve();
+            }).catch(() => {
+              clearTimeout(timeout);
+              resolve();
+            });
+          };
+          webcamVideo.onerror = () => {
+            clearTimeout(timeout);
             resolve();
           };
         }),
       ]);
+
+      // Extra wait to ensure video frames are available
+      await new Promise(resolve => setTimeout(resolve, 100));
 
       // Set canvas size to match screen
       canvas.width = screenVideo.videoWidth;
@@ -271,7 +301,7 @@ export function RecordingProvider({ children }: { children: ReactNode }) {
 
       return new MediaStream(tracks);
     },
-    [isSystemAudioEnabled, isMicEnabled, isWebcamEnabled, getMicStream, getWebcamDimensions, getWebcamPosition]
+    [isSystemAudioEnabled, isMicEnabled, getMicStream, getWebcamDimensions, getWebcamPosition]
   );
 
   const startRecording = useCallback(async () => {
