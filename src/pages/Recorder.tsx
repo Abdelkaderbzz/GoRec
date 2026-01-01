@@ -9,7 +9,7 @@
  * - Recording history
  */
 
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { Mic, MicOff, Volume2, VolumeX, Camera, CameraOff, Circle, Square, Pause, Play, Download, RotateCcw, Share2, Upload, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -42,8 +42,32 @@ export default function Recorder() {
   const { uploadVideo, isUploading, uploadProgress } = useVideoUpload();
   const [shareUrl, setShareUrl] = useState<string | null>(null);
   const [showShareDialog, setShowShareDialog] = useState(false);
+  const [isTogglingMic, setIsTogglingMic] = useState(false);
+  const [isTogglingWebcam, setIsTogglingWebcam] = useState(false);
 
   const webcamRef = useRef<HTMLVideoElement>(null);
+
+  // Wrapper to prevent multiple rapid clicks on mic toggle
+  const handleToggleMic = useCallback(async () => {
+    if (isTogglingMic) return;
+    setIsTogglingMic(true);
+    try {
+      await toggleMic();
+    } finally {
+      setIsTogglingMic(false);
+    }
+  }, [toggleMic, isTogglingMic]);
+
+  // Wrapper to prevent multiple rapid clicks on webcam toggle
+  const handleToggleWebcam = useCallback(async () => {
+    if (isTogglingWebcam) return;
+    setIsTogglingWebcam(true);
+    try {
+      await toggleWebcam();
+    } finally {
+      setIsTogglingWebcam(false);
+    }
+  }, [toggleWebcam, isTogglingWebcam]);
 
   useEffect(() => {
     if (webcamRef.current && webcamStream) {
@@ -209,7 +233,7 @@ export default function Recorder() {
                   {isMicEnabled ? <Mic className="w-4 h-4" /> : <MicOff className="w-4 h-4" />}
                   {t.recorder.settings.microphone}
                 </Label>
-                <Switch checked={isMicEnabled} onCheckedChange={toggleMic} disabled={!isIdle} />
+                <Switch checked={isMicEnabled} onCheckedChange={handleToggleMic} disabled={!isIdle || isTogglingMic} />
               </div>
 
               {isMicEnabled && audioDevices.length > 0 && (
@@ -238,7 +262,7 @@ export default function Recorder() {
                     {isWebcamEnabled ? <Camera className="w-4 h-4" /> : <CameraOff className="w-4 h-4" />}
                     {t.recorder.settings.enableWebcam}
                   </Label>
-                  <Switch checked={isWebcamEnabled} onCheckedChange={toggleWebcam} />
+                  <Switch checked={isWebcamEnabled} onCheckedChange={handleToggleWebcam} disabled={isTogglingWebcam} />
                 </div>
 
                 {isWebcamEnabled && (
