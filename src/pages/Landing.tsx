@@ -136,9 +136,7 @@ export default function Landing() {
         <div className='container mx-auto'>
           <div className='flex flex-col md:flex-row items-center justify-between gap-6'>
             <div className='text-center md:text-start'>
-              <h3 className='text-xl font-bold gradient-text mb-2'>
-                ScreenRec
-              </h3>
+              <h3 className='text-xl font-bold gradient-text mb-2'>GoRec</h3>
               <p className='text-sm text-muted-foreground'>
                 {t.landing.footer.madeBy} abdelkaderbz
               </p>
@@ -178,7 +176,7 @@ export default function Landing() {
 
           <div className='mt-8 pt-6 border-t border-border/30 text-center'>
             <p className='text-sm text-muted-foreground'>
-              © {new Date().getFullYear()} ScreenRec. {t.landing.footer.rights}
+              © {new Date().getFullYear()} GoRec. {t.landing.footer.rights}
             </p>
           </div>
         </div>

@@ -1,6 +1,6 @@
 # Setup Guide
 
-Complete guide to setting up ScreenRec for development and production.
+Complete guide to setting up GoRec for development and production.
 
 ## Prerequisites
 
@@ -144,8 +144,8 @@ CMD ["nginx", "-g", "daemon off;"]
 Build and run:
 
 ```bash
-docker build -t screenrec .
-docker run -p 8080:80 screenrec
+docker build -t gorec .
+docker run -p 8080:80 gorec
 ```
 
 ## Database Schema Setup
