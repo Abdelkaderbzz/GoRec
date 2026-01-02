@@ -31,12 +31,14 @@ A powerful, modern screen recording application built with React and TypeScript.
 ### Installation
 
 1. **Clone the repository**
+
    ```bash
    git clone https://github.com/Abdelkaderbzz/screen-recorder.git
    cd screen-recorder
    ```
 
 2. **Install dependencies**
+
    ```bash
    npm install
    # or
@@ -44,11 +46,13 @@ A powerful, modern screen recording application built with React and TypeScript.
    ```
 
 3. **Set up environment variables**
+
    ```bash
    cp .env.example .env
    ```
-   
+
    Edit `.env` with your Supabase credentials:
+
    ```env
    VITE_SUPABASE_URL=your_supabase_url
    VITE_SUPABASE_PUBLISHABLE_KEY=your_supabase_anon_key
@@ -56,6 +60,7 @@ A powerful, modern screen recording application built with React and TypeScript.
    ```
 
 4. **Start development server**
+
    ```bash
    npm run dev
    # or
@@ -102,6 +107,7 @@ src/
 ## 🛠️ Tech Stack
 
 ### Frontend
+
 - **React 18** - UI library with hooks
 - **TypeScript** - Type safety
 - **Vite** - Fast build tool
@@ -113,6 +119,7 @@ src/
 - **Zod** - Schema validation
 
 ### Backend
+
 - **Supabase** - Backend as a Service
   - PostgreSQL database
   - Authentication
@@ -120,19 +127,20 @@ src/
   - Row Level Security
 
 ### Media APIs
+
 - **MediaDevices API** - Screen & webcam capture
 - **MediaRecorder API** - Recording functionality
 - **Web Audio API** - Audio processing
 
 ## 📜 Available Scripts
 
-| Command | Description |
-|---------|-------------|
-| `npm run dev` | Start development server |
-| `npm run build` | Build for production |
-| `npm run build:dev` | Build for development |
-| `npm run preview` | Preview production build |
-| `npm run lint` | Run ESLint |
+| Command             | Description              |
+| ------------------- | ------------------------ |
+| `npm run dev`       | Start development server |
+| `npm run build`     | Build for production     |
+| `npm run build:dev` | Build for development    |
+| `npm run preview`   | Preview production build |
+| `npm run lint`      | Run ESLint               |
 
 ## 📚 Documentation
 
@@ -143,21 +151,21 @@ src/
 
 ## 🌐 Routes
 
-| Path | Component | Description |
-|------|-----------|-------------|
-| `/` | Landing | Home page |
-| `/auth` | Auth | Login/Register |
-| `/recorder` | Recorder | Recording interface |
-| `/watch/:token` | Watch | Shared video playback |
-| `*` | NotFound | 404 page |
+| Path            | Component | Description           |
+| --------------- | --------- | --------------------- |
+| `/`             | Landing   | Home page             |
+| `/auth`         | Auth      | Login/Register        |
+| `/recorder`     | Recorder  | Recording interface   |
+| `/watch/:token` | Watch     | Shared video playback |
+| `*`             | NotFound  | 404 page              |
 
 ## 🔒 Environment Variables
 
-| Variable | Required | Description |
-|----------|----------|-------------|
-| `VITE_SUPABASE_URL` | ✅ | Supabase project URL |
-| `VITE_SUPABASE_PUBLISHABLE_KEY` | ✅ | Supabase anon/public key |
-| `VITE_SUPABASE_PROJECT_ID` | ✅ | Supabase project ID |
+| Variable                        | Required | Description              |
+| ------------------------------- | -------- | ------------------------ |
+| `VITE_SUPABASE_URL`             | ✅       | Supabase project URL     |
+| `VITE_SUPABASE_PUBLISHABLE_KEY` | ✅       | Supabase anon/public key |
+| `VITE_SUPABASE_PROJECT_ID`      | ✅       | Supabase project ID      |
 
 ## 🤝 Contributing
 

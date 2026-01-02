@@ -38,11 +38,7 @@ export function Header() {
     <header className='fixed top-0 left-0 right-0 z-50 glass-card border-b border-border/50'>
       <div className='container mx-auto px-4 h-16 flex items-center justify-between'>
         <Link to='/' className='flex items-center gap-2'>
-          <img
-            src='/favicon.png'
-            alt='GoRec'
-            className='w-8 h-8 rounded-lg'
-          />
+          <img src='/favicon.png' alt='GoRec' className='w-8 h-8 rounded-lg' />
           <span className='font-bold text-lg gradient-text'>GoRec</span>
         </Link>
 
