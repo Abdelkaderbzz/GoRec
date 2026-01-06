@@ -436,7 +436,13 @@ export default function Recorder() {
                       <Label>{t.recorder.settings.webcamPosition}</Label>
                       <Select
                         value={webcamPosition}
-                        onValueChange={(v: any) => setWebcamPosition(v)}
+                        onValueChange={(
+                          v:
+                            | 'top-left'
+                            | 'top-right'
+                            | 'bottom-left'
+                            | 'bottom-right'
+                        ) => setWebcamPosition(v)}
                       >
                         <SelectTrigger>
                           <SelectValue />
@@ -461,7 +467,9 @@ export default function Recorder() {
                       <Label>{t.recorder.settings.webcamSize}</Label>
                       <Select
                         value={webcamSize}
-                        onValueChange={(v: any) => setWebcamSize(v)}
+                        onValueChange={(v: 'small' | 'medium' | 'large') =>
+                          setWebcamSize(v)
+                        }
                       >
                         <SelectTrigger>
                           <SelectValue />
