@@ -1,0 +1,69 @@
+name: 🔒 Security Vulnerability
+description: Report a security vulnerability (use responsibly)
+title: "[Security]: "
+labels: ["security", "priority-high"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ⚠️ **IMPORTANT**: For critical security vulnerabilities, please email security@gorec.app instead of creating a public issue.
+        
+        Only use this form for lower-severity issues that can be disclosed publicly.
+
+  - type: dropdown
+    id: severity
+    attributes:
+      label: Severity
+      options:
+        - Low - Minor issue, limited impact
+        - Medium - Moderate impact, workaround available
+        - High - Significant impact, no workaround
+        - Critical - Use private disclosure instead
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Vulnerability Description
+      description: Describe the security issue
+      placeholder: |
+        What is the vulnerability?
+        How can it be exploited?
+    validations:
+      required: true
+
+  - type: textarea
+    id: impact
+    attributes:
+      label: Impact
+      description: What is the potential impact of this vulnerability?
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Steps to Reproduce
+      description: How can we reproduce this issue?
+      placeholder: |
+        1. ...
+        2. ...
+    validations:
+      required: true
+
+  - type: textarea
+    id: fix
+    attributes:
+      label: Suggested Fix
+      description: If you have suggestions on how to fix this
+
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: Checklist
+      options:
+        - label: I have not disclosed this vulnerability publicly elsewhere
+          required: true
+        - label: I understand this issue will be visible to others
+          required: true

@@ -1,14 +1,31 @@
 {
-  "name": "vite_react_shadcn_ts",
+  "name": "gorec",
   "private": true,
-  "version": "0.0.0",
+  "version": "0.1.0",
+  "description": "Free browser-based screen recorder with cloud storage",
+  "author": "Abdelkader Bouzomita",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Abdelkaderbzz/GoRec.git"
+  },
   "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
     "build:dev": "vite build --mode development",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "lint:fix": "eslint . --fix",
+    "preview": "vite preview",
+    "typecheck": "tsc --noEmit",
+    "security:audit": "node supabase/security-audit.js",
+    "security:test": "node supabase/security-test.js",
+    "version:patch": "npm version patch -m 'chore: bump version to %s'",
+    "version:minor": "npm version minor -m 'chore: bump version to %s'",
+    "version:major": "npm version major -m 'chore: bump version to %s'",
+    "release": "npm run build && npm run security:audit",
+    "preversion": "npm run lint && npm run typecheck",
+    "postversion": "git push && git push --tags"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.10.0",
