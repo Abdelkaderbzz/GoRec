@@ -14,4 +14,20 @@ export default defineConfig(({ mode }) => ({
       '@': path.resolve(__dirname, './src'),
     },
   },
+  build: {
+    // Disable source maps in production for security
+    sourcemap: mode === 'development',
+    // Minify for production
+    minify: mode === 'production' ? 'esbuild' : false,
+    // Rollup options
+    rollupOptions: {
+      output: {
+        // Don't expose internal paths
+        manualChunks: {
+          vendor: ['react', 'react-dom'],
+          supabase: ['@supabase/supabase-js'],
+        },
+      },
+    },
+  },
 }));
