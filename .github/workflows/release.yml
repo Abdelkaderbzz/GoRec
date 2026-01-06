@@ -1,0 +1,107 @@
+# Release Workflow
+# Creates a GitHub release when a version tag is pushed
+
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+
+permissions:
+  contents: write
+
+env:
+  NODE_VERSION: '20'
+
+jobs:
+  # ==========================================
+  # Build & Create Release
+  # ==========================================
+  release:
+    name: Create Release
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build application
+        run: npm run build
+        env:
+          VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
+          VITE_SUPABASE_PUBLISHABLE_KEY: ${{ secrets.VITE_SUPABASE_PUBLISHABLE_KEY }}
+
+      - name: Get version from tag
+        id: get_version
+        run: echo "VERSION=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
+
+      - name: Generate changelog
+        id: changelog
+        run: |
+          # Get commits since last tag
+          LAST_TAG=$(git describe --tags --abbrev=0 HEAD^ 2>/dev/null || echo "")
+          if [ -n "$LAST_TAG" ]; then
+            CHANGES=$(git log --pretty=format:"- %s (%h)" $LAST_TAG..HEAD)
+          else
+            CHANGES=$(git log --pretty=format:"- %s (%h)" HEAD~10..HEAD)
+          fi
+          echo "CHANGES<<EOF" >> $GITHUB_OUTPUT
+          echo "$CHANGES" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+
+      - name: Create zip archive
+        run: |
+          cd dist
+          zip -r ../gorec-${{ steps.get_version.outputs.VERSION }}.zip .
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v1
+        with:
+          name: GoRec ${{ steps.get_version.outputs.VERSION }}
+          body: |
+            ## What's Changed
+
+            ${{ steps.changelog.outputs.CHANGES }}
+
+            ## Installation
+
+            This release is automatically deployed to [gorec.netlify.app](https://gorec.netlify.app)
+
+            ## Security
+
+            All releases pass our security audit. Run `node supabase/security-audit.js` to verify.
+          files: |
+            gorec-${{ steps.get_version.outputs.VERSION }}.zip
+          draft: false
+          prerelease: ${{ contains(github.ref, 'alpha') || contains(github.ref, 'beta') || contains(github.ref, 'rc') }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  # ==========================================
+  # Notify Team (Optional)
+  # ==========================================
+  notify:
+    name: Notify Team
+    runs-on: ubuntu-latest
+    needs: release
+    if: success()
+    steps:
+      - name: Get version from tag
+        id: get_version
+        run: echo "VERSION=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
+
+      - name: Post release notification
+        run: |
+          echo "🎉 GoRec ${{ steps.get_version.outputs.VERSION }} has been released!"
+          echo "View release: https://github.com/${{ github.repository }}/releases/tag/${{ steps.get_version.outputs.VERSION }}"

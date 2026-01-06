@@ -1,0 +1,84 @@
+# Changelog
+
+All notable changes to GoRec will be documented in this file.
+
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
+and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+## [Unreleased]
+
+### Added
+
+- Comprehensive security audit script
+- Client-side rate limiting for uploads
+- XSS protection utilities
+- Security headers via Netlify configuration
+- Content Security Policy implementation
+
+### Changed
+
+- Disabled source maps in production builds
+- Enhanced file validation for uploads
+
+### Security
+
+- Fixed RLS policies to prevent unauthorized data access
+- Secured storage bucket to prevent anonymous listing
+- Added input sanitization for all user inputs
+
+---
+
+## [0.1.0] - 2026-01-07
+
+### Added
+
+- Initial release of GoRec
+- Screen recording with browser APIs
+- Webcam overlay support
+- Audio recording (microphone + system)
+- Cloud storage via Supabase
+- Share recordings with public links
+- User authentication
+- Recording history
+- Multi-language support (English, Arabic)
+- Dark/Light theme
+- Mobile responsive design
+
+### Security
+
+- Row Level Security on all database tables
+- Secure file storage with user isolation
+- JWT-based authentication
+
+---
+
+## Version History
+
+| Version | Date       | Highlights      |
+| ------- | ---------- | --------------- |
+| 0.1.0   | 2026-01-07 | Initial release |
+
+---
+
+## Upcoming
+
+### v0.2.0 (Planned)
+
+- [ ] Screen annotations during recording
+- [ ] Video trimming and editing
+- [ ] Custom recording quality settings
+- [ ] Keyboard shortcuts
+
+### v0.3.0 (Planned)
+
+- [ ] Team workspaces
+- [ ] Recording analytics
+- [ ] Embed code generation
+- [ ] API access
+
+### v1.0.0 (Target)
+
+- [ ] Stable API
+- [ ] Full documentation
+- [ ] 99.9% uptime SLA
+- [ ] Enterprise features
