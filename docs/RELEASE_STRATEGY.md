@@ -1,4 +1,5 @@
 # GoRec Release Strategy
+
 ## Professional Release Management for Production Applications
 
 ---
@@ -6,6 +7,7 @@
 ## 🎯 Release Philosophy
 
 **Semantic Versioning (SemVer)**: `MAJOR.MINOR.PATCH`
+
 - **MAJOR** (1.0.0 → 2.0.0): Breaking changes, major UI overhauls
 - **MINOR** (1.0.0 → 1.1.0): New features, backwards compatible
 - **PATCH** (1.0.0 → 1.0.1): Bug fixes, security patches
@@ -27,39 +29,45 @@ main (production)
 
 ### Branch Rules:
 
-| Branch | Purpose | Deploys To | Protection |
-|--------|---------|------------|------------|
-| `main` | Production releases | Production (gorec.app) | Require PR, 1 approval, CI pass |
-| `develop` | Integration & staging | Staging (staging.gorec.app) | Require PR, CI pass |
-| `feature/*` | New features | Preview (PR previews) | None |
-| `fix/*` | Bug fixes | Preview | None |
-| `hotfix/*` | Critical production fixes | Fast-track to main | 1 approval |
+| Branch      | Purpose                   | Deploys To                  | Protection                      |
+| ----------- | ------------------------- | --------------------------- | ------------------------------- |
+| `main`      | Production releases       | Production (gorec.app)      | Require PR, 1 approval, CI pass |
+| `develop`   | Integration & staging     | Staging (staging.gorec.app) | Require PR, CI pass             |
+| `feature/*` | New features              | Preview (PR previews)       | None                            |
+| `fix/*`     | Bug fixes                 | Preview                     | None                            |
+| `hotfix/*`  | Critical production fixes | Fast-track to main          | 1 approval                      |
 
 ---
 
 ## 📦 Release Types
 
 ### 1. Regular Release (Weekly/Bi-weekly)
+
 ```
 feature/* → develop → main
 ```
+
 - Accumulate features in `develop`
 - Test on staging environment
 - Create release PR to `main`
 - Tag with version (v1.2.0)
 
 ### 2. Hotfix Release (As needed)
+
 ```
 hotfix/* → main (and back-merge to develop)
 ```
+
 - Critical security or breaking bugs only
 - Fast-track approval process
 - Immediate deployment
 
 ### 3. Beta/Preview Release
+
 ```
 develop → beta tag (v1.3.0-beta.1)
 ```
+
 - For testing new features with select users
 - Deploy to beta.gorec.app
 
@@ -68,6 +76,7 @@ develop → beta tag (v1.3.0-beta.1)
 ## 🔄 Release Workflow
 
 ### Phase 1: Development (Continuous)
+
 ```bash
 # Create feature branch
 git checkout develop
@@ -83,6 +92,7 @@ gh pr create --base develop
 ```
 
 ### Phase 2: Staging (Pre-release)
+
 ```bash
 # After PR merged to develop
 # Automatic deployment to staging.gorec.app
@@ -90,6 +100,7 @@ gh pr create --base develop
 ```
 
 ### Phase 3: Release Preparation
+
 ```bash
 # Create release branch (optional for larger releases)
 git checkout develop
@@ -106,6 +117,7 @@ gh pr create --base main --title "Release v1.2.0"
 ```
 
 ### Phase 4: Production Release
+
 ```bash
 # After PR approved and merged
 git checkout main
@@ -120,6 +132,7 @@ gh release create v1.2.0 --title "v1.2.0" --notes-file RELEASE_NOTES.md
 ```
 
 ### Phase 5: Post-release
+
 ```bash
 # Back-merge main to develop
 git checkout develop
@@ -132,19 +145,24 @@ git push origin develop
 ## 🏷️ Version Numbering Guide
 
 ### Current: v0.x.x (Pre-release/Beta)
+
 You're building towards v1.0.0. Use:
+
 - `v0.1.0` - Initial working version
 - `v0.2.0` - Major feature additions
 - `v0.2.1` - Bug fixes
 
 ### Production: v1.x.x+
+
 After stable release:
+
 - `v1.0.0` - First stable release
 - `v1.1.0` - New feature (annotations)
 - `v1.1.1` - Bug fix
 - `v2.0.0` - Major redesign or breaking API
 
 ### Pre-release Tags
+
 - `v1.2.0-alpha.1` - Early testing
 - `v1.2.0-beta.1` - Feature complete, testing
 - `v1.2.0-rc.1` - Release candidate
@@ -154,6 +172,7 @@ After stable release:
 ## 📋 Release Checklist
 
 ### Before Release
+
 - [ ] All tests passing
 - [ ] Security audit passing (`node supabase/security-audit.js`)
 - [ ] No critical bugs in issue tracker
@@ -164,12 +183,14 @@ After stable release:
 - [ ] Environment variables documented
 
 ### During Release
+
 - [ ] PR approved by at least 1 reviewer
 - [ ] CI/CD pipeline green
 - [ ] Staging environment tested
 - [ ] Release notes prepared
 
 ### After Release
+
 - [ ] Production deployment verified
 - [ ] Smoke tests passing
 - [ ] Monitoring dashboards checked
@@ -181,12 +202,12 @@ After stable release:
 
 ## 🚀 Deployment Environments
 
-| Environment | URL | Branch | Auto-deploy |
-|-------------|-----|--------|-------------|
-| Development | localhost:8080 | any | Manual |
-| Preview | pr-123.gorec.app | PR branches | On PR |
-| Staging | staging.gorec.app | develop | On merge |
-| Production | gorec.app | main | On tag |
+| Environment | URL               | Branch      | Auto-deploy |
+| ----------- | ----------------- | ----------- | ----------- |
+| Development | localhost:8080    | any         | Manual      |
+| Preview     | pr-123.gorec.app  | PR branches | On PR       |
+| Staging     | staging.gorec.app | develop     | On merge    |
+| Production  | gorec.app         | main        | On tag      |
 
 ---
 
@@ -203,13 +224,14 @@ After stable release:
 
 ### For GoRec (Early Stage):
 
-| Cadence | Type | Description |
-|---------|------|-------------|
-| Weekly | Patch | Bug fixes, small improvements |
-| Bi-weekly | Minor | New features |
+| Cadence   | Type  | Description                              |
+| --------- | ----- | ---------------------------------------- |
+| Weekly    | Patch | Bug fixes, small improvements            |
+| Bi-weekly | Minor | New features                             |
 | Quarterly | Major | Big features, potential breaking changes |
 
 ### Release Day: **Tuesday/Wednesday**
+
 - Avoid Friday releases (no weekend debugging)
 - Avoid Monday (post-weekend issues)
 
@@ -232,6 +254,7 @@ security: patch XSS vulnerability
 ```
 
 ### Commit Message Format:
+
 ```
 <type>(<scope>): <description>
 
@@ -241,6 +264,7 @@ security: patch XSS vulnerability
 ```
 
 Example:
+
 ```
 feat(recorder): add picture-in-picture webcam overlay
 
@@ -256,14 +280,17 @@ Closes #42
 ## 🔧 Tooling Recommendations
 
 ### Automated Releases
+
 - **semantic-release**: Auto version bump based on commits
 - **release-please**: Google's release automation
 - **changesets**: For monorepo-friendly releases
 
 ### Changelog Generation
+
 - **conventional-changelog**: From commit history
 - **auto-changelog**: Simple changelog generator
 
 ### Version Management
+
 - `npm version patch/minor/major`
 - **standard-version**: Automated versioning + changelog

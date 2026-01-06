@@ -71,15 +71,15 @@ jobs:
           name: GoRec ${{ steps.get_version.outputs.VERSION }}
           body: |
             ## What's Changed
-            
+
             ${{ steps.changelog.outputs.CHANGES }}
-            
+
             ## Installation
-            
+
             This release is automatically deployed to [gorec.netlify.app](https://gorec.netlify.app)
-            
+
             ## Security
-            
+
             All releases pass our security audit. Run `node supabase/security-audit.js` to verify.
           files: |
             gorec-${{ steps.get_version.outputs.VERSION }}.zip

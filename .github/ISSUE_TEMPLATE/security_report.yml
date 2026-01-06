@@ -1,13 +1,13 @@
 name: 🔒 Security Vulnerability
 description: Report a security vulnerability (use responsibly)
-title: "[Security]: "
-labels: ["security", "priority-high"]
+title: '[Security]: '
+labels: ['security', 'priority-high']
 body:
   - type: markdown
     attributes:
       value: |
         ⚠️ **IMPORTANT**: For critical security vulnerabilities, please email security@gorec.app instead of creating a public issue.
-        
+
         Only use this form for lower-severity issues that can be disclosed publicly.
 
   - type: dropdown
