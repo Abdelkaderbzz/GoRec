@@ -147,31 +147,28 @@ jobs:
         run: pnpm audit --prod || true
 
   # ==========================================
-  # Notifications (Telegram + WhatsApp)
+  # Telegram Notification
   # ==========================================
   notify:
-    name: Send Notifications
+    name: Telegram Notification
     runs-on: ubuntu-latest
     needs: [lint, build, security]
     if: always()
     steps:
-      - name: Determine build status
-        id: status
-        run: |
-          if [[ "${{ needs.lint.result }}" == "success" && "${{ needs.build.result }}" == "success" && "${{ needs.security.result }}" == "success" ]]; then
-            echo "status=success" >> $GITHUB_OUTPUT
-            echo "emoji=✅" >> $GITHUB_OUTPUT
-          else
-            echo "status=failed" >> $GITHUB_OUTPUT
-            echo "emoji=❌" >> $GITHUB_OUTPUT
-          fi
-
       - name: Send Telegram notification
         env:
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
         run: |
-          MESSAGE="${{ steps.status.outputs.emoji }} *GoRec CI* ${{ steps.status.outputs.status == 'success' && 'SUCCESS' || 'FAILED' }}
+          if [[ "${{ needs.lint.result }}" == "success" && "${{ needs.build.result }}" == "success" && "${{ needs.security.result }}" == "success" ]]; then
+            STATUS="✅ SUCCESS"
+            EMOJI="🎉"
+          else
+            STATUS="❌ FAILED"
+            EMOJI="🚨"
+          fi
+          
+          MESSAGE="${EMOJI} *GoRec CI* ${STATUS}
 
           📦 *Repository:* ${{ github.repository }}
           🌿 *Branch:* ${{ github.ref_name }}
@@ -188,40 +185,3 @@ jobs:
             -d chat_id="${TELEGRAM_CHAT_ID}" \
             -d parse_mode="Markdown" \
             -d text="${MESSAGE}" || true
-
-      - name: Send WhatsApp notification
-        env:
-          WHATSAPP_PHONE_NUMBER_ID: ${{ secrets.WHATSAPP_PHONE_NUMBER_ID }}
-          WHATSAPP_ACCESS_TOKEN: ${{ secrets.WHATSAPP_ACCESS_TOKEN }}
-          WHATSAPP_RECIPIENT_PHONE: ${{ secrets.WHATSAPP_RECIPIENT_PHONE }}
-        run: |
-          STATUS="${{ steps.status.outputs.status == 'success' && '✅ SUCCESS' || '❌ FAILED' }}"
-          BRANCH="${{ github.ref_name }}"
-          AUTHOR="${{ github.actor }}"
-          COMMIT="${{ github.sha }}"
-          LINK="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
-          
-          curl -s -X POST "https://graph.facebook.com/v22.0/${WHATSAPP_PHONE_NUMBER_ID}/messages" \
-            -H "Authorization: Bearer ${WHATSAPP_ACCESS_TOKEN}" \
-            -H "Content-Type: application/json" \
-            -d '{
-              "messaging_product": "whatsapp",
-              "to": "'"${WHATSAPP_RECIPIENT_PHONE}"'",
-              "type": "template",
-              "template": {
-                "name": "ci_notification",
-                "language": { "code": "en_US" },
-                "components": [
-                  {
-                    "type": "body",
-                    "parameters": [
-                      { "type": "text", "text": "'"${STATUS}"'" },
-                      { "type": "text", "text": "'"${BRANCH}"'" },
-                      { "type": "text", "text": "'"${AUTHOR}"'" },
-                      { "type": "text", "text": "'"${COMMIT:0:7}"'" },
-                      { "type": "text", "text": "'"${LINK}"'" }
-                    ]
-                  }
-                ]
-              }
-            }' || true

@@ -95,10 +95,10 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   # ==========================================
-  # Notifications (Telegram + WhatsApp)
+  # Telegram Notification
   # ==========================================
   notify:
-    name: Send Notifications
+    name: Telegram Notification
     runs-on: ubuntu-latest
     needs: release
     if: always()
@@ -135,43 +135,6 @@ jobs:
             -d chat_id="${TELEGRAM_CHAT_ID}" \
             -d parse_mode="Markdown" \
             -d text="${MESSAGE}" || true
-
-      - name: Send WhatsApp notification
-        env:
-          WHATSAPP_PHONE_NUMBER_ID: ${{ secrets.WHATSAPP_PHONE_NUMBER_ID }}
-          WHATSAPP_ACCESS_TOKEN: ${{ secrets.WHATSAPP_ACCESS_TOKEN }}
-          WHATSAPP_RECIPIENT_PHONE: ${{ secrets.WHATSAPP_RECIPIENT_PHONE }}
-        run: |
-          STATUS="${{ needs.release.result == 'success' && '🎉 RELEASED' || '❌ FAILED' }}"
-          VERSION="${{ steps.get_version.outputs.VERSION }}"
-          AUTHOR="${{ github.actor }}"
-          REPO="${{ github.repository }}"
-          LINK="https://github.com/${{ github.repository }}/releases/tag/${{ steps.get_version.outputs.VERSION }}"
-          
-          curl -s -X POST "https://graph.facebook.com/v22.0/${WHATSAPP_PHONE_NUMBER_ID}/messages" \
-            -H "Authorization: Bearer ${WHATSAPP_ACCESS_TOKEN}" \
-            -H "Content-Type: application/json" \
-            -d '{
-              "messaging_product": "whatsapp",
-              "to": "'"${WHATSAPP_RECIPIENT_PHONE}"'",
-              "type": "template",
-              "template": {
-                "name": "ci_notification",
-                "language": { "code": "en_US" },
-                "components": [
-                  {
-                    "type": "body",
-                    "parameters": [
-                      { "type": "text", "text": "'"${STATUS}"'" },
-                      { "type": "text", "text": "'"${VERSION}"'" },
-                      { "type": "text", "text": "'"${AUTHOR}"'" },
-                      { "type": "text", "text": "'"${REPO}"'" },
-                      { "type": "text", "text": "'"${LINK}"'" }
-                    ]
-                  }
-                ]
-              }
-            }' || true
 
       - name: Post release notification (console)
         run: |
