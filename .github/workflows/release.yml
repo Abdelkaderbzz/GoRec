@@ -142,6 +142,12 @@ jobs:
           WHATSAPP_ACCESS_TOKEN: ${{ secrets.WHATSAPP_ACCESS_TOKEN }}
           WHATSAPP_RECIPIENT_PHONE: ${{ secrets.WHATSAPP_RECIPIENT_PHONE }}
         run: |
+          STATUS="${{ needs.release.result == 'success' && '🎉 RELEASED' || '❌ FAILED' }}"
+          VERSION="${{ steps.get_version.outputs.VERSION }}"
+          AUTHOR="${{ github.actor }}"
+          REPO="${{ github.repository }}"
+          LINK="https://github.com/${{ github.repository }}/releases/tag/${{ steps.get_version.outputs.VERSION }}"
+          
           curl -s -X POST "https://graph.facebook.com/v22.0/${WHATSAPP_PHONE_NUMBER_ID}/messages" \
             -H "Authorization: Bearer ${WHATSAPP_ACCESS_TOKEN}" \
             -H "Content-Type: application/json" \
@@ -150,8 +156,20 @@ jobs:
               "to": "'"${WHATSAPP_RECIPIENT_PHONE}"'",
               "type": "template",
               "template": {
-                "name": "hello_world",
-                "language": { "code": "en_US" }
+                "name": "ci_notification",
+                "language": { "code": "en_US" },
+                "components": [
+                  {
+                    "type": "body",
+                    "parameters": [
+                      { "type": "text", "text": "'"${STATUS}"'" },
+                      { "type": "text", "text": "'"${VERSION}"'" },
+                      { "type": "text", "text": "'"${AUTHOR}"'" },
+                      { "type": "text", "text": "'"${REPO}"'" },
+                      { "type": "text", "text": "'"${LINK}"'" }
+                    ]
+                  }
+                ]
               }
             }' || true
 
