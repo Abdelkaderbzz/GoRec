@@ -47,6 +47,9 @@ import { useAuth } from '@/contexts/AuthContext';
 import { Header } from '@/components/shared/Header';
 import { ShareDialog } from '@/components/recorder/ShareDialog';
 import { RecordingsHistory } from '@/components/recorder/RecordingsHistory';
+import { VideoPlayer } from 'vidify';
+
+const VidifyPlayer = VideoPlayer as React.ComponentType<React.ComponentProps<typeof VideoPlayer>>;
 
 export default function Recorder() {
   const { t } = useI18n();
@@ -227,10 +230,22 @@ export default function Recorder() {
                   </div>
                 </div>
               ) : isStopped && recordedBlob ? (
-                <video
-                  src={URL.createObjectURL(recordedBlob)}
-                  controls
-                  className='w-full h-full rounded-lg'
+                <VidifyPlayer
+                  src={[URL.createObjectURL(recordedBlob)]}
+                  loop={false}
+                  muted={false}
+                  defaultSrcIndex={0}
+                  volume={0.7}
+                  durationType="default"
+                  annotation={
+                    <span className="text-sm font-semibold text-white">GoRec</span>
+                  }
+                  block={false}
+                  rounded={true}
+                  width="100%"
+                  primaryColor="#8B5CF6"
+                  autoPlay={false}
+                  onError={() => console.error("Video playback error")}
                 />
               ) : (
                 <div className='text-center text-muted-foreground'>
@@ -280,228 +295,235 @@ export default function Recorder() {
                 </Button>
               )}
               {(isRecording || isPaused) && (
-                <>
-                  <Button
-                    onClick={isPaused ? resumeRecording : pauseRecording}
+                  <Button={isPaused ? resumeRecording : pauseRecording}
+                    onClick={isRecording ? pauseRecording : resumeRecording}nt='secondary'
+                    size='lg'
                     variant='secondary'
-                    size='lg'
                     className='gap-2'
                   >
-                    {isPaused ? (
-                      <Play className='w-5 h-5' />
-                    ) : (
-                      <Pause className='w-5 h-5' />
-                    )}
-                    {isPaused
-                      ? t.recorder.controls.resume
-                      : t.recorder.controls.pause}
-                  </Button>
-                  <Button
-                    onClick={stopRecording}
-                    variant='destructive'
-                    size='lg'
+                    {isRecording   <Play className='w-5 h-5' />
+                      ? t.recorder.controls.pause
+                      : t.recorder.controls.resume}e className='w-5 h-5' />
+                  </Button> )}
+                  <Button    {isPaused
+                    onClick={stopRecording}esume
+                    variant='destructive'    : t.recorder.controls.pause}
+                    size='lg'n>
                     className='gap-2'
-                  >
+                  >stopRecording}
                     <Square className='w-5 h-5' /> {t.recorder.controls.stop}
-                  </Button>
+                  </Button> size='lg'
                 </>
               )}
-              {isStopped && recordedBlob && (
-                <>
+              {isStopped && recordedBlob && ( className='w-5 h-5' /> {t.recorder.controls.stop}
+                <>n>
                   <Button
                     onClick={downloadRecording}
-                    size='lg'
+                    size='lg'b && (
                     className='bg-gradient-to-r from-primary to-accent hover:opacity-90 gap-2'
                   >
-                    <Download className='w-5 h-5' />{' '}
+                    <Download className='w-5 h-5' />{' '} onClick={downloadRecording}
                     {t.recorder.controls.download}
-                  </Button>
+                  </Button>cent hover:opacity-90 gap-2'
                   <Button
-                    onClick={handleUploadAndShare}
-                    size='lg'
+                    onClick={handleUploadAndShare}{' '}
+                    size='lg'.recorder.controls.download}
                     variant='secondary'
                     className='gap-2'
-                    disabled={isUploading}
-                  >
+                    disabled={isUploading}dleUploadAndShare}
+                  >g'
                     {isUploading ? (
+                      <Loader2 className='w-5 h-5 animate-spin' />gap-2'
+                    ) : (ng}
+                  >   <Upload className='w-5 h-5' />
+                    {isUploading ? ((
                       <Loader2 className='w-5 h-5 animate-spin' />
-                    ) : (
-                      <Upload className='w-5 h-5' />
-                    )}
-                    {t.recorder.controls.upload}
-                  </Button>
-                  {shareUrl && (
-                    <Button
-                      onClick={() => setShowShareDialog(true)}
-                      size='lg'
+                    ) : (n>
+                      <Upload className='w-5 h-5' />'w-5 h-5' />
+                    )}utton
+                    {t.recorder.controls.upload}eDialog(true)}oad}
+                  </Button>'lg'
+                  {shareUrl && (utline'& (
+                    <ButtonName='gap-2'
+                      onClick={() => setShowShareDialog(true)})}
+                      size='lg'lassName='w-5 h-5' /> {t.recorder.controls.share}
                       variant='outline'
                       className='gap-2'
-                    >
-                      <Share2 className='w-5 h-5' /> {t.recorder.controls.share}
-                    </Button>
-                  )}
-                  <Button
+                    >tton >
+                      <Share2 className='w-5 h-5' /> {t.recorder.controls.share} {t.recorder.controls.share}
+                    </Button>ghost'  </Button>
+                  )}size='lg'  )}
+                  <ButtonName='gap-2'                  <Button
                     onClick={resetRecording}
-                    variant='ghost'
-                    size='lg'
+                    variant='ghost'sName='w-5 h-5' />{' '}
+                    size='lg'er.controls.newRecording}
                     className='gap-2'
                   >
                     <RotateCcw className='w-5 h-5' />{' '}
-                    {t.recorder.controls.newRecording}
+                    {t.recorder.controls.newRecording}rols.newRecording}
                   </Button>
                 </>
-              )}
-            </div>
-          </div>
-
-          {/* Settings Panel */}
+              )}ttings Panel */}
+            </div>ssName='space-y-6'>
+          </div> className='glass-card gradient-border rounded-2xl p-6 space-y-6'>
+              <h3 className='font-semibold text-lg'>
+          {/* Settings Panel */}ings.audio}gs Panel */}
           <div className='space-y-6'>
             <div className='glass-card gradient-border rounded-2xl p-6 space-y-6'>
-              <h3 className='font-semibold text-lg'>
-                {t.recorder.settings.audio}
-              </h3>
-
-              <div className='flex items-center justify-between'>
-                <Label className='flex items-center gap-2'>
-                  {isMicEnabled ? (
+              <h3 className='font-semibold text-lg'>ify-between'>Name='font-semibold text-lg'>
+                {t.recorder.settings.audio}s-center gap-2'>io}
+              </h3>isMicEnabled ? (
                     <Mic className='w-4 h-4' />
-                  ) : (
+              <div className='flex items-center justify-between'>een'>
+                <Label className='flex items-center gap-2'>ame='flex items-center gap-2'>
+                  {isMicEnabled ? (   {isMicEnabled ? (
+                    <Mic className='w-4 h-4' />ne}
+                  ) : (>
                     <MicOff className='w-4 h-4' />
-                  )}
-                  {t.recorder.settings.microphone}
-                </Label>
+                  )}ecked={isMicEnabled}
+                  {t.recorder.settings.microphone}}gs.microphone}
+                </Label>ed={!isIdle || isTogglingMic}/Label>
                 <Switch
                   checked={isMicEnabled}
                   onCheckedChange={handleToggleMic}
-                  disabled={!isIdle || isTogglingMic}
-                />
-              </div>
-
-              {isMicEnabled && audioDevices.length > 0 && (
+                  disabled={!isIdle || isTogglingMic}0 && (le || isTogglingMic}
+                />elect
+              </div>lue={selectedAudioDevice || ''}
+                  onValueChange={setSelectedAudioDevice}
+              {isMicEnabled && audioDevices.length > 0 && ((
                 <Select
                   value={selectedAudioDevice || ''}
-                  onValueChange={setSelectedAudioDevice}
-                  disabled={!isIdle}
-                >
-                  <SelectTrigger>
-                    <SelectValue placeholder={t.recorder.settings.selectMic} />
-                  </SelectTrigger>
-                  <SelectContent>
+                  onValueChange={setSelectedAudioDevice}.settings.selectMic} />Change={setSelectedAudioDevice}
+                  disabled={!isIdle}disabled={!isIdle}
+                > <SelectContent>                >
+                  <SelectTrigger>.map((device) => (
+                    <SelectValue placeholder={t.recorder.settings.selectMic} />>ttings.selectMic} />
+                  </SelectTrigger>bel}
+                  <SelectContent>m>
                     {audioDevices.map((device) => (
                       <SelectItem key={device.deviceId} value={device.deviceId}>
-                        {device.label}
+                        {device.label}abel}
                       </SelectItem>
                     ))}
-                  </SelectContent>
-                </Select>
-              )}
-
-              <div className='flex items-center justify-between'>
-                <Label className='flex items-center gap-2'>
-                  {isSystemAudioEnabled ? (
+                  </SelectContent> items-center justify-between'>ectContent>
+                </Select>assName='flex items-center gap-2'>
+              )}  {isSystemAudioEnabled ? (
                     <Volume2 className='w-4 h-4' />
-                  ) : (
+              <div className='flex items-center justify-between'>een'>
+                <Label className='flex items-center gap-2'>Name='flex items-center gap-2'>
+                  {isSystemAudioEnabled ? (stemAudioEnabled ? (
+                    <Volume2 className='w-4 h-4' />
+                  ) : (>
                     <VolumeX className='w-4 h-4' />
-                  )}
-                  {t.recorder.settings.systemAudio}
-                </Label>
+                  )}ecked={isSystemAudioEnabled}
+                  {t.recorder.settings.systemAudio}o}
+                </Label>ed={!isIdle}
                 <Switch
                   checked={isSystemAudioEnabled}
                   onCheckedChange={toggleSystemAudio}
-                  disabled={!isIdle}
-                />
-              </div>
-
-              <div className='border-t border-border pt-6'>
-                <h3 className='font-semibold text-lg mb-4'>
-                  {t.recorder.settings.webcam}
+                  disabled={!isIdle}-t border-border pt-6'>
+                />3 className='font-semibold text-lg mb-4'>
+              </div>.recorder.settings.webcam}
                 </h3>
-                <div className='flex items-center justify-between mb-4'>
-                  <Label className='flex items-center gap-2'>
-                    {isWebcamEnabled ? (
-                      <Camera className='w-4 h-4' />
-                    ) : (
+              <div className='border-t border-border pt-6'>etween mb-4'>ame='border-t border-border pt-6'>
+                <h3 className='font-semibold text-lg mb-4'>'>text-lg mb-4'>
+                  {t.recorder.settings.webcam}
+                </h3> <Camera className='w-4 h-4' />
+                <div className='flex items-center justify-between mb-4'>b-4'>
+                  <Label className='flex items-center gap-2'>ssName='flex items-center gap-2'>
+                    {isWebcamEnabled ? (  {isWebcamEnabled ? (
+                      <Camera className='w-4 h-4' />m}me='w-4 h-4' />
+                    ) : (>) : (
                       <CameraOff className='w-4 h-4' />
-                    )}
-                    {t.recorder.settings.enableWebcam}
-                  </Label>
+                    )}ecked={isWebcamEnabled}
+                    {t.recorder.settings.enableWebcam}m}er.settings.enableWebcam}
+                  </Label>ed={isTogglingWebcam}
                   <Switch
                     checked={isWebcamEnabled}
                     onCheckedChange={handleToggleWebcam}
                     disabled={isTogglingWebcam}
                   />
-                </div>
-
-                {isWebcamEnabled && (
-                  <>
+                </div>iv className='space-y-2 mb-4'>
+                      <Label>{t.recorder.settings.webcamPosition}</Label>
+                {isWebcamEnabled && (d && (
+                  <>    value={webcamPosition}
                     <div className='space-y-2 mb-4'>
                       <Label>{t.recorder.settings.webcamPosition}</Label>
-                      <Select
+                      <Select 'top-left'
                         value={webcamPosition}
-                        onValueChange={(
-                          v:
-                            | 'top-left'
+                        onValueChange={(ft'
+                          v:| 'bottom-right'
+                            | 'top-left'sition(v)}
                             | 'top-right'
                             | 'bottom-left'
                             | 'bottom-right'
                         ) => setWebcamPosition(v)}
-                      >
-                        <SelectTrigger>
-                          <SelectValue />
+                      > <SelectContent>
+                        <SelectTrigger>alue='top-left'>
+                          <SelectValue />ettings.positions.topLeft}
                         </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value='top-left'>
-                            {t.recorder.settings.positions.topLeft}
-                          </SelectItem>
-                          <SelectItem value='top-right'>
-                            {t.recorder.settings.positions.topRight}
-                          </SelectItem>
-                          <SelectItem value='bottom-left'>
+                        <SelectContent>alue='top-right'>
+                          <SelectItem value='top-left'>ons.topRight}ctItem value='top-left'>
+                            {t.recorder.settings.positions.topLeft}ions.topLeft}
+                          </SelectItem>alue='bottom-left'>
+                          <SelectItem value='top-right'>ns.bottomLeft}
+                            {t.recorder.settings.positions.topRight}.topRight}
+                          </SelectItem>alue='bottom-right'>
+                          <SelectItem value='bottom-left'>.bottomRight}
                             {t.recorder.settings.positions.bottomLeft}
-                          </SelectItem>
-                          <SelectItem value='bottom-right'>
+                          </SelectItem>> </SelectItem>
+                          <SelectItem value='bottom-right'>-right'>
                             {t.recorder.settings.positions.bottomRight}
-                          </SelectItem>
-                        </SelectContent>
+                          </SelectItem>ce-y-2'>
+                        </SelectContent>.settings.webcamSize}</Label>
                       </Select>
-                    </div>
-                    <div className='space-y-2'>
-                      <Label>{t.recorder.settings.webcamSize}</Label>
+                    </div>lue={webcamSize}
+                    <div className='space-y-2'>ll' | 'medium' | 'large') =>
+                      <Label>{t.recorder.settings.webcamSize}</Label>el>
                       <Select
                         value={webcamSize}
                         onValueChange={(v: 'small' | 'medium' | 'large') =>
                           setWebcamSize(v)
-                        }
-                      >
-                        <SelectTrigger>
-                          <SelectValue />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value='small'>
-                            {t.recorder.settings.sizes.small}
-                          </SelectItem>
-                          <SelectItem value='medium'>
-                            {t.recorder.settings.sizes.medium}
-                          </SelectItem>
-                          <SelectItem value='large'>
-                            {t.recorder.settings.sizes.large}
-                          </SelectItem>
-                        </SelectContent>
+                        }/SelectTrigger>
+                      > <SelectContent>
+                        <SelectTrigger>alue='small'>
+                          <SelectValue />ettings.sizes.small}ctValue />
+                        </SelectTrigger>electTrigger>
+                        <SelectContent>alue='medium'>   <SelectContent>
+                          <SelectItem value='small'>es.medium}        <SelectItem value='small'>
+                            {t.recorder.settings.sizes.small}ttings.sizes.small}
+                          </SelectItem>alue='large'>        </SelectItem>
+                          <SelectItem value='medium'>s.large}                          <SelectItem value='medium'>
+                            {t.recorder.settings.sizes.medium}}
+                          </SelectItem>>tItem>
+                          <SelectItem value='large'> value='large'>
+                            {t.recorder.settings.sizes.large}sizes.large}
+                          </SelectItem>lectItem>
+                        </SelectContent>  </SelectContent>
                       </Select>
                     </div>
                   </>
-                )}
-              </div>
+                )}cordings History */}
+              </div>ngsHistory />
             </div>
-
-            {/* Recordings History */}
-            <RecordingsHistory />
-          </div>
         </div>
-      </div>
+            {/* Recordings History */} */}
+            <RecordingsHistory />
+          </div>Dialog */}      </div>
+        </div>l && (       </div>
+      </div>reDialog      </div>
 
       {/* Share Dialog */}
       {shareUrl && (
+        <ShareDialog
+          open={showShareDialog}
+          onOpenChange={setShowShareDialog}
+          shareUrl={shareUrl}
+        />
+      )}
+    </div>/div>      )}        />          shareUrl={shareUrl}          onOpenChange={setShowShareDialog}          open={showShareDialog}
+  );  {/* Share Dialog */}
+}     {shareUrl && (
         <ShareDialog
           open={showShareDialog}
           onOpenChange={setShowShareDialog}
