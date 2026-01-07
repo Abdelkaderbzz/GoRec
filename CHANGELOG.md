@@ -5,7 +5,26 @@ All notable changes to GoRec will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [0.2.1] - 2026-01-07
+
+### Added
+
+- User profile page with account management
+- OAuth callback handling for third-party authentication
+- Additional npm scripts for linting and type checking
+
+### Changed
+
+- Improved project structure documentation
+- Enhanced CI/CD workflows
+
+### Fixed
+
+- Minor bug fixes and stability improvements
+
+---
+
+## [0.2.0] - 2026-01-07
 
 ### Added
 
@@ -14,6 +33,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - XSS protection utilities
 - Security headers via Netlify configuration
 - Content Security Policy implementation
+- GitHub Actions CI/CD workflows (ci.yml, deploy-staging.yml, release.yml)
+- Issue templates and PR templates
 
 ### Changed
 
@@ -25,6 +46,27 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fixed RLS policies to prevent unauthorized data access
 - Secured storage bucket to prevent anonymous listing
 - Added input sanitization for all user inputs
+
+---
+
+## [0.1.1] - 2026-01-07
+
+### Changed
+
+- Replaced vidify video player with native HTML5 video player
+- Updated CSP to support Feeduser widget and Umami analytics
+- Improved video player controls with seek, volume, and fullscreen
+
+### Fixed
+
+- Fixed React useRef error caused by duplicate React instances
+- Fixed audio device type mismatch in AudioSettings component
+- Fixed CSP blocking third-party scripts and images
+
+### Removed
+
+- Removed vidify dependency
+- Removed react-player dependency
 
 ---
 
@@ -54,9 +96,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Version History
 
-| Version | Date       | Highlights      |
-| ------- | ---------- | --------------- |
-| 0.1.0   | 2026-01-07 | Initial release |
+| Version | Date       | Highlights                         |
+| ------- | ---------- | ---------------------------------- |
+| 0.2.1   | 2026-01-07 | Profile page, OAuth improvements   |
+| 0.2.0   | 2026-01-07 | Security enhancements, CI/CD setup |
+| 0.1.1   | 2026-01-07 | Native video player, bug fixes     |
+| 0.1.0   | 2026-01-07 | Initial release                    |
 
 ---
 

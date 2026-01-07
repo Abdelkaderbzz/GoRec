@@ -143,6 +143,36 @@ const {
 
 ---
 
+### useMobile
+
+Detects if the user is on a mobile device.
+
+```typescript
+const isMobile = useMobile(); // boolean
+```
+
+---
+
+### useToast
+
+Manages toast notifications for user feedback.
+
+```typescript
+const { toast, dismiss, toasts } = useToast();
+
+// Show a toast
+toast({
+  title: 'Success',
+  description: 'Recording uploaded successfully!',
+  variant: 'default', // 'default' | 'destructive'
+});
+
+// Dismiss a specific toast
+dismiss(toastId);
+```
+
+---
+
 ### useVideoUpload
 
 Handles video upload to Supabase Storage.

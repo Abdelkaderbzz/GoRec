@@ -4,8 +4,8 @@ Complete guide to setting up GoRec for development and production.
 
 ## Prerequisites
 
-- **Node.js** 18.0 or higher (or Bun 1.0+)
-- **npm** 9.0+ (or yarn/pnpm/bun)
+- **Node.js** 18.0 or higher
+- **pnpm** 8.0+ (recommended package manager)
 - **Git** for version control
 - **Supabase account** (free tier available)
 
@@ -20,16 +20,8 @@ cd screen-recorder
 
 ### 2. Install Dependencies
 
-Using npm:
-
 ```bash
-npm install
-```
-
-Using Bun (faster):
-
-```bash
-bun install
+pnpm install
 ```
 
 ### 3. Supabase Setup
@@ -93,7 +85,7 @@ VITE_SUPABASE_PROJECT_ID="your-project-id"
 ### 5. Start Development Server
 
 ```bash
-npm run dev
+pnpm dev
 ```
 
 Open [http://localhost:5173](http://localhost:5173)
@@ -103,7 +95,7 @@ Open [http://localhost:5173](http://localhost:5173)
 ### Build for Production
 
 ```bash
-npm run build
+pnpm build
 ```
 
 Output is in the `dist/` folder.
@@ -121,7 +113,7 @@ Output is in the `dist/` folder.
 
 1. Push to GitHub
 2. Import in [Netlify](https://netlify.com)
-3. Build command: `npm run build`
+3. Build command: `pnpm build`
 4. Publish directory: `dist`
 5. Add environment variables
 
@@ -129,11 +121,12 @@ Output is in the `dist/` folder.
 
 ```dockerfile
 FROM node:18-alpine AS builder
+RUN corepack enable && corepack prepare pnpm@latest --activate
 WORKDIR /app
-COPY package*.json ./
-RUN npm ci
+COPY package.json pnpm-lock.yaml ./
+RUN pnpm install --frozen-lockfile
 COPY . .
-RUN npm run build
+RUN pnpm build
 
 FROM nginx:alpine
 COPY --from=builder /app/dist /usr/share/nginx/html
@@ -267,8 +260,7 @@ USING (bucket_id = 'recordings');
 ```bash
 # Clear cache and reinstall
 rm -rf node_modules
-rm package-lock.json
-npm install
+pnpm install
 ```
 
 #### TypeScript errors

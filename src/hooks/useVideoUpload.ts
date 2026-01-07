@@ -79,7 +79,7 @@ export function useVideoUpload() {
           );
         }
 
-        // Validate file type
+        // Validate file type (handles codecs like video/webm;codecs=vp9)
         const file = new File([blob], 'recording.webm', {
           type: blob.type || 'video/webm',
         });
