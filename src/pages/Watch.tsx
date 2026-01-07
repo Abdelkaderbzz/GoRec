@@ -18,7 +18,7 @@ import {
   VolumeX,
   Maximize,
 } from 'lucide-react';
-import ReactPlayer from 'react-player';
+import ReactPlayer, { OnProgressProps } from 'react-player';
 import { Button } from '@/components/ui/button';
 import { supabase } from '@/integrations/supabase/client';
 import { useI18n } from '@/i18n';
@@ -145,13 +145,13 @@ export default function Watch() {
           {recording.public_url ? (
             <div className='relative aspect-video bg-black'>
               <ReactPlayer
-                url={recording.public_url}
+                url={recording.public_url as string}
                 playing={playing}
                 muted={muted}
                 width='100%'
                 height='100%'
                 style={{ position: 'absolute', top: 0, left: 0 }}
-                onProgress={({ played }) => setProgress(played * 100)}
+                onProgress={(state: OnProgressProps) => setProgress(state.played * 100)}
                 onDuration={setDuration}
                 onEnded={() => setPlaying(false)}
                 onError={() => console.error('Video playback error')}
