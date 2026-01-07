@@ -9,8 +9,8 @@ lerna-debug.log*
 .env
 node_modules
 bun.lockb
+package-lock.json
 dist
-pnpm-lock.yaml
 dist-ssr
 *.local
 
