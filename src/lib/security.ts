@@ -179,12 +179,18 @@ export function isValidEmail(email: string): boolean {
 
 /**
  * Validate file type
+ * Checks if the file's MIME type starts with one of the allowed types
+ * (to handle codecs like video/webm;codecs=vp9)
  */
 export function isAllowedFileType(
   file: File,
   allowedTypes: string[] = ['video/webm', 'video/mp4']
 ): boolean {
-  return allowedTypes.includes(file.type);
+  // Check if file.type starts with any of the allowed types
+  // This handles cases like "video/webm;codecs=vp9"
+  return allowedTypes.some(
+    (type) => file.type === type || file.type.startsWith(type + ';')
+  );
 }
 
 /**
