@@ -1,5 +1,9 @@
 # 🎬 GoRec - Browser-Based Screen Recorder
 
+[![CI](https://github.com/Abdelkaderbzz/GoRec/actions/workflows/ci.yml/badge.svg)](https://github.com/Abdelkaderbzz/GoRec/actions/workflows/ci.yml)
+[![Release](https://img.shields.io/github/v/release/Abdelkaderbzz/GoRec?style=flat-square)](https://github.com/Abdelkaderbzz/GoRec/releases)
+[![License](https://img.shields.io/github/license/Abdelkaderbzz/GoRec?style=flat-square)](LICENSE)
+
 A powerful, modern screen recording application built with React and TypeScript. Record your screen, webcam, and audio directly from your browser with seamless cloud storage integration.
 
 ![React](https://img.shields.io/badge/React-18.3-61DAFB?style=flat-square&logo=react)
