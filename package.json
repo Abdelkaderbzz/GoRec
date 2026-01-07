@@ -1,7 +1,7 @@
 {
   "name": "gorec",
   "private": true,
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Free browser-based screen recorder with cloud storage",
   "author": "Abdelkader Bouzomita",
   "license": "MIT",
