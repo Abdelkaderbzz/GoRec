@@ -5,7 +5,7 @@
  * Accessible via share token without authentication.
  */
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import {
   Loader2,
@@ -18,7 +18,6 @@ import {
   VolumeX,
   Maximize,
 } from 'lucide-react';
-import ReactPlayer, { OnProgressProps } from 'react-player';
 import { Button } from '@/components/ui/button';
 import { supabase } from '@/integrations/supabase/client';
 import { useI18n } from '@/i18n';
@@ -41,6 +40,7 @@ export default function Watch() {
   const [showShareDialog, setShowShareDialog] = useState(false);
 
   // Player state
+  const videoRef = useRef<HTMLVideoElement>(null);
   const [playing, setPlaying] = useState(false);
   const [muted, setMuted] = useState(false);
   const [progress, setProgress] = useState(0);
@@ -78,6 +78,49 @@ export default function Watch() {
     const mins = Math.floor(seconds / 60);
     const secs = Math.floor(seconds % 60);
     return `${mins}:${secs.toString().padStart(2, '0')}`;
+  };
+
+  const handlePlayPause = () => {
+    if (!videoRef.current) return;
+    if (playing) {
+      videoRef.current.pause();
+    } else {
+      videoRef.current.play();
+    }
+    setPlaying(!playing);
+  };
+
+  const handleMuteToggle = () => {
+    if (!videoRef.current) return;
+    videoRef.current.muted = !muted;
+    setMuted(!muted);
+  };
+
+  const handleTimeUpdate = () => {
+    if (!videoRef.current) return;
+    const currentProgress =
+      (videoRef.current.currentTime / videoRef.current.duration) * 100;
+    setProgress(currentProgress);
+  };
+
+  const handleLoadedMetadata = () => {
+    if (!videoRef.current) return;
+    setDuration(videoRef.current.duration);
+  };
+
+  const handleEnded = () => {
+    setPlaying(false);
+  };
+
+  const handleFullscreen = () => {
+    videoRef.current?.requestFullscreen();
+  };
+
+  const handleProgressClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (!videoRef.current) return;
+    const rect = e.currentTarget.getBoundingClientRect();
+    const clickPosition = (e.clientX - rect.left) / rect.width;
+    videoRef.current.currentTime = clickPosition * videoRef.current.duration;
   };
 
   if (isLoading) {
@@ -144,23 +187,24 @@ export default function Watch() {
         <div className='glass-card gradient-border rounded-2xl overflow-hidden'>
           {recording.public_url ? (
             <div className='relative aspect-video bg-black'>
-              <ReactPlayer
-                url={recording.public_url as string}
-                playing={playing}
-                muted={muted}
-                width='100%'
-                height='100%'
-                style={{ position: 'absolute', top: 0, left: 0 }}
-                onProgress={(state: OnProgressProps) => setProgress(state.played * 100)}
-                onDuration={setDuration}
-                onEnded={() => setPlaying(false)}
-                onError={() => console.error('Video playback error')}
+              <video
+                ref={videoRef}
+                src={recording.public_url}
+                className='w-full h-full object-contain'
+                onTimeUpdate={handleTimeUpdate}
+                onLoadedMetadata={handleLoadedMetadata}
+                onEnded={handleEnded}
+                onPlay={() => setPlaying(true)}
+                onPause={() => setPlaying(false)}
               />
 
               {/* Custom Controls Overlay */}
               <div className='absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-4'>
                 {/* Progress Bar */}
-                <div className='w-full h-1 bg-white/20 rounded-full mb-3 cursor-pointer group'>
+                <div
+                  className='w-full h-1 bg-white/20 rounded-full mb-3 cursor-pointer group'
+                  onClick={handleProgressClick}
+                >
                   <div
                     className='h-full bg-primary rounded-full relative transition-all'
                     style={{ width: `${progress}%` }}
@@ -173,7 +217,7 @@ export default function Watch() {
                 <div className='flex items-center justify-between'>
                   <div className='flex items-center gap-3'>
                     <button
-                      onClick={() => setPlaying(!playing)}
+                      onClick={handlePlayPause}
                       className='w-10 h-10 flex items-center justify-center rounded-full bg-primary hover:bg-primary/80 transition-colors'
                     >
                       {playing ? (
@@ -184,7 +228,7 @@ export default function Watch() {
                     </button>
 
                     <button
-                      onClick={() => setMuted(!muted)}
+                      onClick={handleMuteToggle}
                       className='w-8 h-8 flex items-center justify-center rounded-full hover:bg-white/10 transition-colors'
                     >
                       {muted ? (
@@ -201,10 +245,7 @@ export default function Watch() {
                   </div>
 
                   <button
-                    onClick={() => {
-                      const video = document.querySelector('video');
-                      video?.requestFullscreen();
-                    }}
+                    onClick={handleFullscreen}
                     className='w-8 h-8 flex items-center justify-center rounded-full hover:bg-white/10 transition-colors'
                   >
                     <Maximize className='w-4 h-4 text-white' />
