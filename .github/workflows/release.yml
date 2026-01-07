@@ -95,19 +95,48 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   # ==========================================
-  # Notify Team (Optional)
+  # Telegram Notification
   # ==========================================
   notify:
-    name: Notify Team
+    name: Telegram Notification
     runs-on: ubuntu-latest
     needs: release
-    if: success()
+    if: always()
     steps:
       - name: Get version from tag
         id: get_version
         run: echo "VERSION=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
 
-      - name: Post release notification
+      - name: Send Telegram notification
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: |
+          if [[ "${{ needs.release.result }}" == "success" ]]; then
+            STATUS="✅ SUCCESS"
+            EMOJI="🎉"
+          else
+            STATUS="❌ FAILED"
+            EMOJI="🚨"
+          fi
+          
+          MESSAGE="${EMOJI} *GoRec Release* ${STATUS}
+
+          🏷️ *Version:* ${{ steps.get_version.outputs.VERSION }}
+          📦 *Repository:* ${{ github.repository }}
+          👤 *Author:* ${{ github.actor }}
+
+          📥 *Download:* [GitHub Release](https://github.com/${{ github.repository }}/releases/tag/${{ steps.get_version.outputs.VERSION }})
+          🌐 *Live:* https://gorec.netlify.app
+
+          [View Release](https://github.com/${{ github.repository }}/releases/tag/${{ steps.get_version.outputs.VERSION }})"
+          
+          curl -s -X POST "https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage" \
+            -d chat_id="${TELEGRAM_CHAT_ID}" \
+            -d parse_mode="Markdown" \
+            -d text="${MESSAGE}"
+
+      - name: Post release notification (console)
         run: |
           echo "🎉 GoRec ${{ steps.get_version.outputs.VERSION }} has been released!"
           echo "View release: https://github.com/${{ github.repository }}/releases/tag/${{ steps.get_version.outputs.VERSION }}"
