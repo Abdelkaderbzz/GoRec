@@ -14,9 +14,6 @@ jobs:
   deploy-staging:
     name: Deploy to Staging
     runs-on: ubuntu-latest
-    environment:
-      name: staging
-      url: https://staging--gorec.netlify.app
     steps:
       - name: Checkout code
         uses: actions/checkout@v4

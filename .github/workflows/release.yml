@@ -54,7 +54,8 @@ jobs:
           if [ -n "$LAST_TAG" ]; then
             CHANGES=$(git log --pretty=format:"- %s (%h)" $LAST_TAG..HEAD)
           else
-            CHANGES=$(git log --pretty=format:"- %s (%h)" HEAD~10..HEAD)
+            # Fallback: get all commits if less than 10 exist
+            CHANGES=$(git log --pretty=format:"- %s (%h)" 2>/dev/null || echo "- Initial release")
           fi
           echo "CHANGES<<EOF" >> $GITHUB_OUTPUT
           echo "$CHANGES" >> $GITHUB_OUTPUT
