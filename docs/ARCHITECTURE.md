@@ -85,6 +85,8 @@ We use React Context for global state:
 | `useTimer`             | Recording timer                             |
 | `useVideoUpload`       | Upload to Supabase Storage                  |
 | `useRecordingsHistory` | Fetch user's recordings                     |
+| `useMobile`            | Detect mobile device context                |
+| `useToast`             | Toast notification management               |
 
 ## Data Flow
 
@@ -146,31 +148,49 @@ We use React Context for global state:
 ```
 src/
 ├── components/
-│   ├── ui/              # Primitive UI components (shadcn)
+│   ├── ui/              # Primitive UI components (shadcn) - 49 components
 │   ├── shared/          # Shared layout components
 │   │   └── Header.tsx   # App header with navigation
 │   └── recorder/        # Feature-specific components
-│       ├── RecordingsHistory.tsx
-│       └── ShareDialog.tsx
+│       ├── AudioSettings.tsx      # Audio device selection
+│       ├── RecordingControls.tsx  # Start/stop/pause controls
+│       ├── RecordingPreview.tsx   # Screen preview component
+│       ├── RecordingsHistory.tsx  # List of past recordings
+│       ├── ShareDialog.tsx        # Share link generation
+│       ├── UploadProgress.tsx     # Upload progress indicator
+│       ├── WebcamPip.tsx          # Picture-in-picture webcam
+│       └── WebcamSettings.tsx     # Webcam configuration
 │
 ├── contexts/            # Global state management
 │   ├── AuthContext.tsx
 │   └── RecordingContext.tsx
 │
 ├── hooks/               # Custom React hooks
-│   ├── useScreenCapture.ts
-│   ├── useMediaRecorder.ts
-│   └── ...
+│   ├── useScreenCapture.ts    # Screen capture logic
+│   ├── useMediaRecorder.ts    # MediaRecorder API wrapper
+│   ├── useWebcam.ts           # Webcam stream management
+│   ├── useAudioDevices.ts     # Audio device enumeration
+│   ├── useTimer.ts            # Recording timer
+│   ├── useVideoUpload.ts      # Upload functionality
+│   ├── useRecordingsHistory.ts # Recording history
+│   ├── use-mobile.tsx         # Mobile device detection
+│   └── use-toast.ts           # Toast notifications
 │
 ├── pages/               # Route components
-│   ├── Landing.tsx
-│   ├── Recorder.tsx
-│   └── ...
+│   ├── Landing.tsx      # Home page
+│   ├── Auth.tsx         # Authentication page
+│   ├── AuthCallback.tsx # OAuth callback handler
+│   ├── Recorder.tsx     # Main recorder interface
+│   ├── Profile.tsx      # User profile management
+│   ├── Watch.tsx        # Video playback page
+│   ├── Index.tsx        # Index route
+│   └── NotFound.tsx     # 404 page
 │
 ├── i18n/                # Translations
-│   ├── en.ts
-│   ├── ar.ts
-│   └── I18nProvider.tsx
+│   ├── en.ts            # English translations
+│   ├── ar.ts            # Arabic translations (RTL)
+│   ├── I18nProvider.tsx # i18n context provider
+│   └── index.ts         # Module exports
 │
 ├── integrations/        # External services
 │   └── supabase/
@@ -178,7 +198,7 @@ src/
 │       └── types.ts     # Generated TypeScript types
 │
 └── lib/
-    └── utils.ts         # Utility functions
+    └── utils.ts         # Utility functions (cn, etc.)
 ```
 
 ## Security Considerations
