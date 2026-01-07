@@ -12,6 +12,7 @@ import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 import { useI18n } from "@/i18n";
 import { ShareDialog } from "@/components/recorder/ShareDialog";
+import { VideoPlayer } from "vidify";
 
 interface Recording {
   id: string;
@@ -116,11 +117,22 @@ export default function Watch() {
         {/* Video Player */}
         <div className="glass-card gradient-border rounded-2xl overflow-hidden">
           {recording.public_url ? (
-            <video
-              src={recording.public_url}
-              controls
-              autoPlay
-              className="w-full aspect-video bg-black"
+            <VideoPlayer
+              loop={false}
+              muted={false}
+              defaultSrcIndex={0}
+              src={[recording.public_url]}
+              volume={0.7}
+              durationType="default"
+              annotation={
+                <span className="text-sm font-semibold text-white">GoRec</span>
+              }
+              block={false}
+              rounded={true}
+              width="100%"
+              primaryColor="#8B5CF6"
+              autoPlay={true}
+              onError={() => console.error("Video playback error")}
             />
           ) : (
             <div className="w-full aspect-video flex items-center justify-center bg-muted">
