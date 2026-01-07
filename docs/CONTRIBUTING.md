@@ -26,7 +26,8 @@ By participating in this project, you agree to maintain a respectful and inclusi
 
 ### Prerequisites
 
-- Node.js 18+ or Bun 1.0+
+- Node.js 18+
+- pnpm 8.0+
 - Git
 - A code editor (VS Code recommended)
 
@@ -52,7 +53,7 @@ By participating in this project, you agree to maintain a respectful and inclusi
 4. **Install dependencies**
 
    ```bash
-   npm install
+   pnpm install
    ```
 
 5. **Create a branch**
@@ -75,20 +76,20 @@ Use descriptive branch names:
 ### Running the Dev Server
 
 ```bash
-npm run dev
+pnpm dev
 ```
 
 ### Building for Production
 
 ```bash
-npm run build
-npm run preview  # Preview the build
+pnpm build
+pnpm preview  # Preview the build
 ```
 
 ### Linting
 
 ```bash
-npm run lint
+pnpm lint
 ```
 
 ## Coding Standards
@@ -239,8 +240,8 @@ BREAKING CHANGE: RecordingOptions now requires 'quality' field"
 2. **Run checks**
 
    ```bash
-   npm run lint
-   npm run build
+   pnpm lint
+   pnpm build
    ```
 
 3. **Test your changes**
@@ -289,9 +290,9 @@ Describe testing done
 ### Running Tests
 
 ```bash
-npm test              # Run all tests
-npm test -- --watch   # Watch mode
-npm test -- --coverage  # With coverage
+pnpm test              # Run all tests
+pnpm test -- --watch   # Watch mode
+pnpm test -- --coverage  # With coverage
 ```
 
 ### Writing Tests

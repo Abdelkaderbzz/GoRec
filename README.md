@@ -3,6 +3,7 @@
 [![CI](https://github.com/Abdelkaderbzz/GoRec/actions/workflows/ci.yml/badge.svg)](https://github.com/Abdelkaderbzz/GoRec/actions/workflows/ci.yml)
 [![Release](https://img.shields.io/github/v/release/Abdelkaderbzz/GoRec?style=flat-square)](https://github.com/Abdelkaderbzz/GoRec/releases)
 [![License](https://img.shields.io/github/license/Abdelkaderbzz/GoRec?style=flat-square)](LICENSE)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/Abdelkaderbzz/GoRec/pulls)
 
 A powerful, modern screen recording application built with React and TypeScript. Record your screen, webcam, and audio directly from your browser with seamless cloud storage integration.
 
@@ -28,8 +29,8 @@ A powerful, modern screen recording application built with React and TypeScript.
 
 ### Prerequisites
 
-- Node.js 18+ or Bun
-- npm, yarn, or bun package manager
+- Node.js 18+
+- pnpm package manager
 - Supabase account (for backend services)
 
 ### Installation
@@ -44,9 +45,7 @@ A powerful, modern screen recording application built with React and TypeScript.
 2. **Install dependencies**
 
    ```bash
-   npm install
-   # or
-   bun install
+   pnpm install
    ```
 
 3. **Set up environment variables**
@@ -66,9 +65,7 @@ A powerful, modern screen recording application built with React and TypeScript.
 4. **Start development server**
 
    ```bash
-   npm run dev
-   # or
-   bun dev
+   pnpm dev
    ```
 
 5. **Open your browser**
@@ -103,6 +100,8 @@ src/
 │   ├── Landing.tsx     # Home page
 │   ├── Recorder.tsx    # Main recorder page
 │   ├── Auth.tsx        # Authentication page
+│   ├── AuthCallback.tsx # OAuth callback handler
+│   ├── Profile.tsx     # User profile page
 │   ├── Watch.tsx       # Video playback page
 │   └── NotFound.tsx    # 404 page
 └── App.tsx             # Root component with routing
@@ -138,13 +137,29 @@ src/
 
 ## 📜 Available Scripts
 
-| Command             | Description              |
-| ------------------- | ------------------------ |
-| `npm run dev`       | Start development server |
-| `npm run build`     | Build for production     |
-| `npm run build:dev` | Build for development    |
-| `npm run preview`   | Preview production build |
-| `npm run lint`      | Run ESLint               |
+| Command                  | Description                        |
+| ------------------------ | ---------------------------------- |
+| `pnpm dev`               | Start development server           |
+| `pnpm build`             | Build for production               |
+| `pnpm build:dev`         | Build for development              |
+| `pnpm preview`           | Preview production build           |
+| `pnpm lint`              | Run ESLint                         |
+| `pnpm lint:fix`          | Run ESLint with auto-fix           |
+| `pnpm typecheck`         | Run TypeScript type checking       |
+| `pnpm security:audit`    | Run security audit script          |
+| `pnpm release`           | Build and run security audit       |
+
+## 🤝 Contributing
+
+We welcome contributions from everyone! Please read our [Contributing Guide](docs/CONTRIBUTING.md) and [Code of Conduct](CODE_OF_CONDUCT.md) before submitting a pull request.
+
+- Fork the repository
+- Create a feature branch (`git checkout -b feature/amazing-feature`)
+- Commit your changes (`git commit -m 'feat: add amazing feature'`)
+- Push to the branch (`git push origin feature/amazing-feature`)
+- Open a Pull Request
+
+For detailed guidelines, see [docs/CONTRIBUTING.md](docs/CONTRIBUTING.md).
 
 ## 📚 Documentation
 
@@ -152,16 +167,19 @@ src/
 - [Architecture](docs/ARCHITECTURE.md) - Technical architecture overview
 - [API Reference](docs/API.md) - Hooks and API documentation
 - [Contributing](docs/CONTRIBUTING.md) - Contribution guidelines
+- [Code of Conduct](CODE_OF_CONDUCT.md) - Community standards
 
 ## 🌐 Routes
 
-| Path            | Component | Description           |
-| --------------- | --------- | --------------------- |
-| `/`             | Landing   | Home page             |
-| `/auth`         | Auth      | Login/Register        |
-| `/recorder`     | Recorder  | Recording interface   |
-| `/watch/:token` | Watch     | Shared video playback |
-| `*`             | NotFound  | 404 page              |
+| Path             | Component    | Description                |
+| ---------------- | ------------ | -------------------------- |
+| `/`              | Landing      | Home page                  |
+| `/auth`          | Auth         | Login/Register             |
+| `/auth/callback` | AuthCallback | OAuth callback handler     |
+| `/recorder`      | Recorder     | Recording interface        |
+| `/profile`       | Profile      | User profile management    |
+| `/watch/:token`  | Watch        | Shared video playback      |
+| `*`              | NotFound     | 404 page                   |
 
 ## 🔒 Environment Variables
 
@@ -170,16 +188,6 @@ src/
 | `VITE_SUPABASE_URL`             | ✅       | Supabase project URL     |
 | `VITE_SUPABASE_PUBLISHABLE_KEY` | ✅       | Supabase anon/public key |
 | `VITE_SUPABASE_PROJECT_ID`      | ✅       | Supabase project ID      |
-
-## 🤝 Contributing
-
-Contributions are welcome! Please read our [Contributing Guide](docs/CONTRIBUTING.md) for details.
-
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'feat: add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
 
 ## 📄 License
 
