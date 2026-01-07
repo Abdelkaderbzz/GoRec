@@ -85,7 +85,27 @@ jobs:
           curl -s -X POST "https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage" \
             -d chat_id="${TELEGRAM_CHAT_ID}" \
             -d parse_mode="Markdown" \
-            -d text="${MESSAGE}"
+            -d text="${MESSAGE}" || true
+
+      - name: Send WhatsApp notification
+        if: always()
+        env:
+          WHATSAPP_PHONE_NUMBER_ID: ${{ secrets.WHATSAPP_PHONE_NUMBER_ID }}
+          WHATSAPP_ACCESS_TOKEN: ${{ secrets.WHATSAPP_ACCESS_TOKEN }}
+          WHATSAPP_RECIPIENT_PHONE: ${{ secrets.WHATSAPP_RECIPIENT_PHONE }}
+        run: |
+          curl -s -X POST "https://graph.facebook.com/v22.0/${WHATSAPP_PHONE_NUMBER_ID}/messages" \
+            -H "Authorization: Bearer ${WHATSAPP_ACCESS_TOKEN}" \
+            -H "Content-Type: application/json" \
+            -d '{
+              "messaging_product": "whatsapp",
+              "to": "'"${WHATSAPP_RECIPIENT_PHONE}"'",
+              "type": "template",
+              "template": {
+                "name": "hello_world",
+                "language": { "code": "en_US" }
+              }
+            }' || true
 
       - name: Comment deployment URL
         if: github.event_name == 'pull_request'
