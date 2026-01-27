@@ -40,14 +40,14 @@ By participating in this project, you agree to maintain a respectful and inclusi
 2. **Clone your fork**
 
    ```bash
-   git clone https://github.com/YOUR_USERNAME/screen-recorder.git
-   cd screen-recorder
+   git clone https://github.com/YOUR_USERNAME/GoRec.git
+   cd GoRec
    ```
 
 3. **Add upstream remote**
 
    ```bash
-   git remote add upstream https://github.com/Abdelkaderbzz/screen-recorder.git
+   git remote add upstream https://github.com/Abdelkaderbzz/GoRec.git
    ```
 
 4. **Install dependencies**
@@ -62,6 +62,23 @@ By participating in this project, you agree to maintain a respectful and inclusi
    ```
 
 ## Development Workflow
+
+We use **GitHub Flow** - a simple, branch-based workflow:
+
+```
+main (always deployable)
+  ↑
+  └── feature/your-feature  ← You work here
+```
+
+### Workflow Steps
+
+1. **Create a branch** from `main`
+2. **Make changes** and commit
+3. **Open a Pull Request** to `main`
+4. **Review, discuss, and iterate**
+5. **Merge** after approval
+6. **Delete** your feature branch
 
 ### Branch Naming
 
@@ -365,7 +382,7 @@ async function startCapture(options: DisplayMediaOptions): Promise<void> {
 
 ## Questions?
 
-- Open a [GitHub Issue](https://github.com/Abdelkaderbzz/screen-recorder/issues)
-- Start a [Discussion](https://github.com/Abdelkaderbzz/screen-recorder/discussions)
+- Open a [GitHub Issue](https://github.com/Abdelkaderbzz/GoRec/issues)
+- Start a [Discussion](https://github.com/Abdelkaderbzz/GoRec/discussions)
 
 Thank you for contributing! 🎉
