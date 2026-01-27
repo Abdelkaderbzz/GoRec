@@ -14,48 +14,45 @@
 
 ---
 
-## 🌳 Branch Strategy (GitFlow Simplified)
+## 🌳 Branch Strategy (GitHub Flow)
 
 ```
-main (production)
+main (production - always deployable)
   ↑
-  └── develop (staging/integration)
-        ↑
-        ├── feature/screen-annotation
-        ├── feature/cloud-sync
-        ├── fix/upload-timeout
-        └── hotfix/security-patch
+  ├── feature/screen-annotation
+  ├── feature/cloud-sync
+  ├── fix/upload-timeout
+  └── hotfix/security-patch
 ```
 
 ### Branch Rules:
 
-| Branch      | Purpose                   | Deploys To                  | Protection                      |
-| ----------- | ------------------------- | --------------------------- | ------------------------------- |
-| `main`      | Production releases       | Production (gorec.app)      | Require PR, 1 approval, CI pass |
-| `develop`   | Integration & staging     | Staging (staging.gorec.app) | Require PR, CI pass             |
-| `feature/*` | New features              | Preview (PR previews)       | None                            |
-| `fix/*`     | Bug fixes                 | Preview                     | None                            |
-| `hotfix/*`  | Critical production fixes | Fast-track to main          | 1 approval                      |
+| Branch      | Purpose                   | Deploys To             | Protection                      |
+| ----------- | ------------------------- | ---------------------- | ------------------------------- |
+| `main`      | Production releases       | Production (gorec.app) | Require PR, 1 approval, CI pass |
+| `feature/*` | New features              | Preview (PR previews)  | None                            |
+| `fix/*`     | Bug fixes                 | Preview                | None                            |
+| `hotfix/*`  | Critical production fixes | Fast-track to main     | 1 approval                      |
 
 ---
 
 ## 📦 Release Types
 
-### 1. Regular Release (Weekly/Bi-weekly)
+### 1. Regular Release (Continuous)
 
 ```
-feature/* → develop → main
+feature/* → main (via PR)
 ```
 
-- Accumulate features in `develop`
-- Test on staging environment
-- Create release PR to `main`
+- Create feature branch from `main`
+- Open PR when ready
+- After review and CI pass, merge to `main`
 - Tag with version (v1.2.0)
 
 ### 2. Hotfix Release (As needed)
 
 ```
-hotfix/* → main (and back-merge to develop)
+hotfix/* → main
 ```
 
 - Critical security or breaking bugs only
@@ -65,11 +62,11 @@ hotfix/* → main (and back-merge to develop)
 ### 3. Beta/Preview Release
 
 ```
-develop → beta tag (v1.3.0-beta.1)
+main → beta tag (v1.3.0-beta.1)
 ```
 
 - For testing new features with select users
-- Deploy to beta.gorec.app
+- Use pre-release tags
 
 ---
 
@@ -78,45 +75,28 @@ develop → beta tag (v1.3.0-beta.1)
 ### Phase 1: Development (Continuous)
 
 ```bash
-# Create feature branch
-git checkout develop
-git pull origin develop
+# Create feature branch from main
+git checkout main
+git pull origin main
 git checkout -b feature/new-feature
 
 # Work on feature...
 git commit -m "feat: add screen annotation"
 
-# Push and create PR to develop
+# Push and create PR to main
 git push origin feature/new-feature
-gh pr create --base develop
+gh pr create --base main
 ```
 
-### Phase 2: Staging (Pre-release)
+### Phase 2: Review & Testing
 
 ```bash
-# After PR merged to develop
-# Automatic deployment to staging.gorec.app
-# QA testing period: 2-3 days minimum
+# PR triggers CI checks
+# Code review by maintainers
+# Preview deployment for testing (if configured)
 ```
 
-### Phase 3: Release Preparation
-
-```bash
-# Create release branch (optional for larger releases)
-git checkout develop
-git checkout -b release/v1.2.0
-
-# Update version
-npm version minor -m "chore: bump version to %s"
-
-# Update CHANGELOG.md
-# Final testing
-
-# Merge to main
-gh pr create --base main --title "Release v1.2.0"
-```
-
-### Phase 4: Production Release
+### Phase 3: Merge & Release
 
 ```bash
 # After PR approved and merged
@@ -131,13 +111,12 @@ git push origin v1.2.0
 gh release create v1.2.0 --title "v1.2.0" --notes-file RELEASE_NOTES.md
 ```
 
-### Phase 5: Post-release
+### Phase 4: Cleanup
 
 ```bash
-# Back-merge main to develop
-git checkout develop
-git merge main
-git push origin develop
+# Delete merged feature branch
+git branch -d feature/new-feature
+git push origin --delete feature/new-feature
 ```
 
 ---
@@ -186,7 +165,6 @@ After stable release:
 
 - [ ] PR approved by at least 1 reviewer
 - [ ] CI/CD pipeline green
-- [ ] Staging environment tested
 - [ ] Release notes prepared
 
 ### After Release
@@ -196,18 +174,17 @@ After stable release:
 - [ ] Monitoring dashboards checked
 - [ ] Team notified
 - [ ] Social media announcement (major releases)
-- [ ] Back-merge to develop
+- [ ] Feature branch deleted
 
 ---
 
 ## 🚀 Deployment Environments
 
-| Environment | URL               | Branch      | Auto-deploy |
-| ----------- | ----------------- | ----------- | ----------- |
-| Development | localhost:8080    | any         | Manual      |
-| Preview     | pr-123.gorec.app  | PR branches | On PR       |
-| Staging     | staging.gorec.app | develop     | On merge    |
-| Production  | gorec.app         | main        | On tag      |
+| Environment | URL              | Branch      | Auto-deploy |
+| ----------- | ---------------- | ----------- | ----------- |
+| Development | localhost:8080   | any         | Manual      |
+| Preview     | pr-123.gorec.app | PR branches | On PR       |
+| Production  | gorec.app        | main        | On tag      |
 
 ---
 

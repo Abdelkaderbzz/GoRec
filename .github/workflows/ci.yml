@@ -5,9 +5,9 @@ name: CI
 
 on:
   push:
-    branches: [main, develop]
+    branches: [main]
   pull_request:
-    branches: [main, develop]
+    branches: [main]
 
 env:
   NODE_VERSION: '20'
@@ -167,7 +167,7 @@ jobs:
             STATUS="❌ FAILED"
             EMOJI="🚨"
           fi
-          
+
           MESSAGE="${EMOJI} *GoRec CI* ${STATUS}
 
           📦 *Repository:* ${{ github.repository }}
@@ -180,7 +180,7 @@ jobs:
           🔒 *Security:* ${{ needs.security.result }}
 
           [View Run](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})"
-          
+
           curl -s -X POST "https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage" \
             -d chat_id="${TELEGRAM_CHAT_ID}" \
             -d parse_mode="Markdown" \
