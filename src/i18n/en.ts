@@ -1,12 +1,10 @@
 export const en = {
-  // Navigation
   nav: {
     home: 'Home',
     recorder: 'Recorder',
     getStarted: 'Get Started',
   },
 
-  // Landing page
   landing: {
     badge: 'Free Screen Recorder',
     headline: 'Record Your Screen',
@@ -16,7 +14,6 @@ export const en = {
     cta: 'Start Recording Now',
     ctaSecondary: 'Learn More',
 
-    // Features
     features: {
       title: 'Everything You Need',
       subtitle: 'Powerful features packed into a simple interface',
@@ -42,31 +39,26 @@ export const en = {
       },
     },
 
-    // Stats
     stats: {
       recordings: 'Recordings Made',
       users: 'Happy Users',
       rating: 'User Rating',
     },
 
-    // CTA Section
     ctaSection: {
       title: 'Ready to Start Recording?',
     },
 
-    // Footer
     footer: {
       madeBy: 'Made with ❤️ by',
       rights: 'All rights reserved.',
     },
   },
 
-  // Recorder page
   recorder: {
     title: 'GoRec',
     subtitle: 'Configure your recording settings and start capturing',
 
-    // Status
     status: {
       idle: 'Ready to Record',
       recording: 'Recording',
@@ -74,7 +66,6 @@ export const en = {
       stopped: 'Recording Complete',
     },
 
-    // Controls
     controls: {
       start: 'Start Recording',
       stop: 'Stop',
@@ -87,7 +78,6 @@ export const en = {
       uploading: 'Uploading...',
     },
 
-    // Share
     share: {
       title: 'Share Recording',
       description: 'Share your recording via link or social media',
@@ -104,7 +94,6 @@ export const en = {
       uploadFailed: 'Failed to upload recording',
     },
 
-    // History
     history: {
       title: 'Recent Recordings',
       empty: 'No recordings yet. Start recording to see them here!',
@@ -112,7 +101,6 @@ export const en = {
       share: 'Share',
     },
 
-    // Settings
     settings: {
       audio: 'Audio Settings',
       microphone: 'Microphone',
@@ -136,12 +124,10 @@ export const en = {
       },
     },
 
-    // Timer
     timer: {
       label: 'Duration',
     },
 
-    // Errors
     errors: {
       screenDenied: 'Screen sharing was denied. Please allow access to record.',
       micDenied: 'Microphone access was denied. Recording without audio.',
@@ -151,7 +137,6 @@ export const en = {
       guestNotAllowed: 'Please sign in to start recording.',
     },
 
-    // Tips
     tips: {
       title: 'Quick Tips',
       tip1: "Click 'Start Recording' to begin",
@@ -160,7 +145,6 @@ export const en = {
     },
   },
 
-  // Authentication
   auth: {
     welcome: 'Welcome to GoRec',
     description: 'Sign in to save and share your recordings',
@@ -180,7 +164,6 @@ export const en = {
     redirecting: 'Redirecting...',
   },
 
-  // Profile
   profile: {
     title: 'Profile',
     editProfile: 'Edit Profile',
@@ -197,7 +180,6 @@ export const en = {
     signOutSuccess: 'You have been signed out.',
   },
 
-  // Common
   common: {
     loading: 'Loading...',
     error: 'Error',

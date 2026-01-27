@@ -1,10 +1,3 @@
-/**
- * Auth Callback Page
- *
- * Handles OAuth redirects and email confirmation callbacks.
- * Redirects to appropriate page after processing.
- */
-
 import { useEffect, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { Loader2, CheckCircle, XCircle } from 'lucide-react';
@@ -16,14 +9,13 @@ export default function AuthCallback() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const [status, setStatus] = useState<'loading' | 'success' | 'error'>(
-    'loading'
+    'loading',
   );
   const [message, setMessage] = useState('');
 
   useEffect(() => {
     const handleCallback = async () => {
       try {
-        // Check for error in URL params
         const error = searchParams.get('error');
         const errorDescription = searchParams.get('error_description');
 
@@ -34,7 +26,6 @@ export default function AuthCallback() {
           return;
         }
 
-        // Get the session from the URL hash (for OAuth) or exchange code
         const {
           data: { session },
           error: sessionError,
@@ -52,7 +43,6 @@ export default function AuthCallback() {
           setMessage(t.auth.confirmSuccess);
           setTimeout(() => navigate('/recorder'), 2000);
         } else {
-          // Try to exchange code for session
           const code = searchParams.get('code');
           if (code) {
             const { error: exchangeError } =

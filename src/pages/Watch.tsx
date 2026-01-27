@@ -1,10 +1,3 @@
-/**
- * Watch Page
- *
- * Public page for viewing shared recordings.
- * Accessible via share token without authentication.
- */
-
 import { useEffect, useState, useRef } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import {
@@ -39,7 +32,6 @@ export default function Watch() {
   const [error, setError] = useState<string | null>(null);
   const [showShareDialog, setShowShareDialog] = useState(false);
 
-  // Player state
   const videoRef = useRef<HTMLVideoElement>(null);
   const [playing, setPlaying] = useState(false);
   const [muted, setMuted] = useState(false);
@@ -155,7 +147,6 @@ export default function Watch() {
   return (
     <div className='min-h-screen bg-background'>
       <div className='container mx-auto px-4 py-8'>
-        {/* Header */}
         <div className='flex items-center justify-between mb-6'>
           <Link to='/'>
             <Button variant='ghost' className='gap-2'>
@@ -183,7 +174,6 @@ export default function Watch() {
           </div>
         </div>
 
-        {/* Video Player */}
         <div className='glass-card gradient-border rounded-2xl overflow-hidden'>
           {recording.public_url ? (
             <div className='relative aspect-video bg-black'>
@@ -198,9 +188,7 @@ export default function Watch() {
                 onPause={() => setPlaying(false)}
               />
 
-              {/* Custom Controls Overlay */}
               <div className='absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-4'>
-                {/* Progress Bar */}
                 <div
                   className='w-full h-1 bg-white/20 rounded-full mb-3 cursor-pointer group'
                   onClick={handleProgressClick}
@@ -213,7 +201,6 @@ export default function Watch() {
                   </div>
                 </div>
 
-                {/* Controls */}
                 <div className='flex items-center justify-between'>
                   <div className='flex items-center gap-3'>
                     <button
@@ -260,7 +247,6 @@ export default function Watch() {
           )}
         </div>
 
-        {/* Info */}
         <div className='mt-4 text-sm text-muted-foreground'>
           <p>
             Recorded on {new Date(recording.created_at).toLocaleDateString()}
