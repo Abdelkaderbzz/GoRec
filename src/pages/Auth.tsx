@@ -1,10 +1,3 @@
-/**
- * Authentication Page
- *
- * Handles user login and registration with email/password and Google OAuth.
- * Redirects to recorder page after successful authentication.
- */
-
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { z } from 'zod';
@@ -26,7 +19,6 @@ import { useAuth } from '@/contexts/AuthContext';
 import { useI18n } from '@/i18n';
 import { Header } from '@/components/shared/Header';
 
-// Google Icon Component
 const GoogleIcon = () => (
   <svg className='w-5 h-5' viewBox='0 0 24 24'>
     <path
@@ -48,7 +40,6 @@ const GoogleIcon = () => (
   </svg>
 );
 
-// Validation schemas
 const emailSchema = z
   .string()
   .trim()
@@ -74,10 +65,9 @@ export default function Auth() {
   const [isLoading, setIsLoading] = useState(false);
   const [isGoogleLoading, setIsGoogleLoading] = useState(false);
   const [errors, setErrors] = useState<{ email?: string; password?: string }>(
-    {}
+    {},
   );
 
-  // Redirect if already logged in
   useEffect(() => {
     if (user && !authLoading) {
       navigate('/recorder');
@@ -158,7 +148,6 @@ export default function Auth() {
         variant: 'destructive',
       });
     }
-    // Don't set loading to false on success - we'll be redirected
   };
 
   if (authLoading) {
@@ -181,7 +170,6 @@ export default function Auth() {
             <CardDescription>{t.auth.description}</CardDescription>
           </CardHeader>
           <CardContent>
-            {/* Google Sign In Button */}
             <Button
               type='button'
               variant='outline'

@@ -1,14 +1,12 @@
 import type { Translations } from './en';
 
 export const ar: Translations = {
-  // التنقل
   nav: {
     home: 'الرئيسية',
     recorder: 'المسجّل',
     getStarted: 'ابدأ الآن',
   },
 
-  // الصفحة الرئيسية
   landing: {
     badge: 'مسجّل شاشة مجاني',
     headline: 'سجّل شاشتك',
@@ -18,7 +16,6 @@ export const ar: Translations = {
     cta: 'ابدأ التسجيل الآن',
     ctaSecondary: 'اعرف المزيد',
 
-    // الميزات
     features: {
       title: 'كل ما تحتاجه',
       subtitle: 'ميزات قوية في واجهة بسيطة',
@@ -42,31 +39,26 @@ export const ar: Translations = {
       },
     },
 
-    // الإحصائيات
     stats: {
       recordings: 'تسجيل تم',
       users: 'مستخدم سعيد',
       rating: 'تقييم المستخدمين',
     },
 
-    // قسم الدعوة للعمل
     ctaSection: {
       title: 'هل أنت مستعد لبدء التسجيل؟',
     },
 
-    // التذييل
     footer: {
       madeBy: 'صُنع بـ ❤️ بواسطة',
       rights: 'جميع الحقوق محفوظة.',
     },
   },
 
-  // صفحة التسجيل
   recorder: {
     title: 'GoRec',
     subtitle: 'اضبط إعدادات التسجيل وابدأ الالتقاط',
 
-    // الحالة
     status: {
       idle: 'جاهز للتسجيل',
       recording: 'جارٍ التسجيل',
@@ -74,7 +66,6 @@ export const ar: Translations = {
       stopped: 'اكتمل التسجيل',
     },
 
-    // أدوات التحكم
     controls: {
       start: 'بدء التسجيل',
       stop: 'إيقاف',
@@ -87,7 +78,6 @@ export const ar: Translations = {
       uploading: 'جارٍ الرفع...',
     },
 
-    // المشاركة
     share: {
       title: 'مشاركة التسجيل',
       description: 'شارك تسجيلك عبر رابط أو وسائل التواصل',
@@ -104,7 +94,6 @@ export const ar: Translations = {
       uploadFailed: 'فشل رفع التسجيل',
     },
 
-    // السجل
     history: {
       title: 'التسجيلات الأخيرة',
       empty: 'لا توجد تسجيلات بعد. ابدأ التسجيل لرؤيتها هنا!',
@@ -112,7 +101,6 @@ export const ar: Translations = {
       share: 'مشاركة',
     },
 
-    // الإعدادات
     settings: {
       audio: 'إعدادات الصوت',
       microphone: 'الميكروفون',
@@ -136,12 +124,10 @@ export const ar: Translations = {
       },
     },
 
-    // المؤقت
     timer: {
       label: 'المدة',
     },
 
-    // الأخطاء
     errors: {
       screenDenied: 'تم رفض مشاركة الشاشة. يرجى السماح بالوصول للتسجيل.',
       micDenied: 'تم رفض الوصول للميكروفون. سيتم التسجيل بدون صوت.',
@@ -151,7 +137,6 @@ export const ar: Translations = {
       guestNotAllowed: 'يرجى تسجيل الدخول لبدء التسجيل.',
     },
 
-    // نصائح
     tips: {
       title: 'نصائح سريعة',
       tip1: "انقر على 'بدء التسجيل' للبدء",
@@ -160,7 +145,6 @@ export const ar: Translations = {
     },
   },
 
-  // المصادقة
   auth: {
     welcome: 'مرحباً بك في GoRec',
     description: 'سجّل دخولك لحفظ ومشاركة تسجيلاتك',
@@ -180,7 +164,6 @@ export const ar: Translations = {
     redirecting: 'جارٍ إعادة التوجيه...',
   },
 
-  // الملف الشخصي
   profile: {
     title: 'الملف الشخصي',
     editProfile: 'تعديل الملف الشخصي',
@@ -197,7 +180,6 @@ export const ar: Translations = {
     signOutSuccess: 'تم تسجيل خروجك.',
   },
 
-  // عام
   common: {
     loading: 'جارٍ التحميل...',
     error: 'خطأ',

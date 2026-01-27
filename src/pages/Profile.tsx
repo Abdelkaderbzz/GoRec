@@ -1,12 +1,3 @@
-/**
- * Profile Page
- *
- * Simple user profile page with:
- * - User info display
- * - Display name editing
- * - Sign out functionality
- */
-
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
@@ -44,21 +35,19 @@ export default function Profile() {
   const [displayName, setDisplayName] = useState('');
   const [isSaving, setIsSaving] = useState(false);
 
-  // Redirect if not logged in
   useEffect(() => {
     if (!authLoading && !user) {
       navigate('/auth');
     }
   }, [user, authLoading, navigate]);
 
-  // Initialize display name from user metadata
   useEffect(() => {
     if (user) {
       setDisplayName(
         user.user_metadata?.display_name ||
           user.user_metadata?.full_name ||
           user.user_metadata?.name ||
-          ''
+          '',
       );
     }
   }, [user]);
@@ -127,7 +116,6 @@ export default function Profile() {
       <Header />
       <div className='container mx-auto pt-24 px-4'>
         <div className='max-w-2xl mx-auto space-y-6'>
-          {/* Profile Header */}
           <Card className='glass-card gradient-border'>
             <CardHeader className='text-center pb-2'>
               <div className='flex justify-center mb-4'>
@@ -165,7 +153,6 @@ export default function Profile() {
             </CardContent>
           </Card>
 
-          {/* Edit Profile */}
           <Card className='glass-card gradient-border'>
             <CardHeader>
               <CardTitle className='flex items-center gap-2'>
@@ -209,7 +196,6 @@ export default function Profile() {
             </CardContent>
           </Card>
 
-          {/* Sign Out */}
           <Card className='glass-card border-destructive/30'>
             <CardContent className='pt-6'>
               <Button
