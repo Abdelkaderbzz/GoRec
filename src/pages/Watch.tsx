@@ -15,6 +15,7 @@ import { Button } from '@/components/ui/button';
 import { supabase } from '@/integrations/supabase/client';
 import { useI18n } from '@/i18n';
 import { ShareDialog } from '@/components/recorder/ShareDialog';
+import { formatVideoDuration } from '@/lib/formatTime';
 
 interface Recording {
   id: string;
@@ -67,16 +68,6 @@ export default function Watch() {
 
     fetchRecording();
   }, [token]);
-
-  const formatTime = (seconds: number) => {
-    // Handle invalid values (NaN, Infinity, negative)
-    if (!isFinite(seconds) || isNaN(seconds) || seconds < 0) {
-      return '--:--';
-    }
-    const mins = Math.floor(seconds / 60);
-    const secs = Math.floor(seconds % 60);
-    return `${mins}:${secs.toString().padStart(2, '0')}`;
-  };
 
   const handlePlayPause = () => {
     if (!videoRef.current) return;
@@ -267,8 +258,8 @@ export default function Watch() {
                     </button>
 
                     <span className='text-white/80 text-sm font-mono'>
-                      {formatTime(currentTime)} /{' '}
-                      {duration > 0 ? formatTime(duration) : '--:--'}
+                      {formatVideoDuration(currentTime)} /{' '}
+                      {formatVideoDuration(duration)}
                     </span>
                   </div>
 
@@ -292,11 +283,7 @@ export default function Watch() {
           <p>
             Recorded on {new Date(recording.created_at).toLocaleDateString()}
             {recording.duration_seconds &&
-              ` • ${Math.floor(recording.duration_seconds / 60)}:${(
-                recording.duration_seconds % 60
-              )
-                .toString()
-                .padStart(2, '0')}`}
+              ` • ${formatVideoDuration(recording.duration_seconds)}`}
           </p>
         </div>
       </div>
