@@ -28,7 +28,9 @@ export function RecordingPreview({
   const [playing, setPlaying] = useState(false);
   const [muted, setMuted] = useState(false);
   const [progress, setProgress] = useState(0);
+  const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
+  const [isMetadataLoaded, setIsMetadataLoaded] = useState(false);
 
   // Create object URL for the recorded blob
   const videoSrc = useMemo(() => {
@@ -77,14 +79,46 @@ export function RecordingPreview({
 
   const handleTimeUpdate = () => {
     if (!videoRef.current) return;
-    const currentProgress =
-      (videoRef.current.currentTime / videoRef.current.duration) * 100;
-    setProgress(currentProgress);
+    const videoDuration = videoRef.current.duration;
+    const videoCurrentTime = videoRef.current.currentTime;
+
+    // Handle cases where duration is not yet available or invalid
+    if (!videoDuration || !isFinite(videoDuration) || videoDuration <= 0) {
+      setCurrentTime(videoCurrentTime);
+      return;
+    }
+
+    const currentProgress = (videoCurrentTime / videoDuration) * 100;
+    setProgress(isFinite(currentProgress) ? currentProgress : 0);
+    setCurrentTime(videoCurrentTime);
   };
 
   const handleLoadedMetadata = () => {
     if (!videoRef.current) return;
-    setDuration(videoRef.current.duration);
+    const videoDuration = videoRef.current.duration;
+    if (videoDuration && isFinite(videoDuration) && videoDuration > 0) {
+      setDuration(videoDuration);
+      setIsMetadataLoaded(true);
+    }
+  };
+
+  const handleDurationChange = () => {
+    if (!videoRef.current) return;
+    const videoDuration = videoRef.current.duration;
+    if (videoDuration && isFinite(videoDuration) && videoDuration > 0) {
+      setDuration(videoDuration);
+      setIsMetadataLoaded(true);
+    }
+  };
+
+  const handleCanPlay = () => {
+    // Fallback: try to get duration when video can play
+    if (!videoRef.current || isMetadataLoaded) return;
+    const videoDuration = videoRef.current.duration;
+    if (videoDuration && isFinite(videoDuration) && videoDuration > 0) {
+      setDuration(videoDuration);
+      setIsMetadataLoaded(true);
+    }
   };
 
   const handleEnded = () => {
@@ -138,8 +172,11 @@ export function RecordingPreview({
             ref={videoRef}
             src={videoSrc}
             className='w-full h-full object-contain'
+            preload='metadata'
             onTimeUpdate={handleTimeUpdate}
             onLoadedMetadata={handleLoadedMetadata}
+            onDurationChange={handleDurationChange}
+            onCanPlay={handleCanPlay}
             onEnded={handleEnded}
             onPlay={() => setPlaying(true)}
             onPause={() => setPlaying(false)}
@@ -186,8 +223,8 @@ export function RecordingPreview({
                 </button>
 
                 <span className='text-white/80 text-sm font-mono'>
-                  {formatTime((progress / 100) * duration)} /{' '}
-                  {formatTime(duration)}
+                  {formatTime(currentTime)} /{' '}
+                  {duration > 0 ? formatTime(duration) : '--:--'}
                 </span>
               </div>
 
