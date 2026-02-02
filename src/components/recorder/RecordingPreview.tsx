@@ -56,6 +56,10 @@ export function RecordingPreview({
   }, [recordedBlob]);
 
   const formatTime = (seconds: number) => {
+    // Handle invalid values (NaN, Infinity, negative)
+    if (!isFinite(seconds) || isNaN(seconds) || seconds < 0) {
+      return '--:--';
+    }
     const mins = Math.floor(seconds / 60);
     const secs = Math.floor(seconds % 60);
     return `${mins}:${secs.toString().padStart(2, '0')}`;
